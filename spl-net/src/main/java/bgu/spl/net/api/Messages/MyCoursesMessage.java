@@ -1,4 +1,6 @@
 package bgu.spl.net.api.Messages;
 
-public class MyCoursesMessage {
+import bgu.spl.net.api.Message;
+
+public class MyCoursesMessage implements Message {
 }
