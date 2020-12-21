@@ -6,12 +6,10 @@ public class AdminRegMessage implements Message {
     private String username;
     private String password;
 
-    public AdminRegMessage(byte[] info, int length){
+    public AdminRegMessage(String username, String password){
         super();
-        String decodedString = new String(info, 0, length, StandardCharsets.UTF_8);
-        String[] splitString = decodedString.split("0");
-        this.username = splitString[0];
-        this.password = splitString[1];
+        this.username = username;
+        this.password = password;
 
     }
 
