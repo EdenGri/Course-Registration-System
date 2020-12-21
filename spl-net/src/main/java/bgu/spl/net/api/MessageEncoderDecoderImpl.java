@@ -122,8 +122,13 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
             }
             else {
                 zeroCounter=0;
+                String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
+                String[] splitString = decodedString.split("0");
+                String username = splitString[0];
+                String password = splitString[1];
+                len=0;
                 opcode.clear();
-                return new StudentRegMessage(bytes,len);
+                return new StudentRegMessage(username,password);
             }
         }
         pushByte(nextByte);
@@ -138,8 +143,13 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
             }
             else {
                 zeroCounter=0;
+                String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
+                String[] splitString = decodedString.split("0");
+                String username = splitString[0];
+                String password = splitString[1];
+                len=0;
                 opcode.clear();
-                return new LoginMessage(bytes,len);
+                return new LoginMessage(username,password);
             }
         }
         pushByte(nextByte);

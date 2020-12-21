@@ -7,11 +7,10 @@ public class LoginMessage implements Message {
     private String username;
     private String password;
 
-    public LoginMessage(byte[] info, int length){
-        String decodedString = new String(info, 0, length, StandardCharsets.UTF_8);
-        String[] splitString = decodedString.split("\0");
-        username = splitString[0];
-        password = splitString[1];
+    public LoginMessage(String userName, String password){
+        super();
+        this.username = userName;
+        this.password = password;
     }
 
     public String getUsername(){

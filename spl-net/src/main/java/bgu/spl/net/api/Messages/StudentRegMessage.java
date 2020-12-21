@@ -9,12 +9,10 @@ public class StudentRegMessage implements Message {
     private String password;
 
     //constructor
-    public StudentRegMessage(byte[] info, int length){
+    public StudentRegMessage(String username, String password){
         super();
-        String decodedString = new String(info, 0, length, StandardCharsets.UTF_8);
-        String[] splitString = decodedString.split("\0");
-        this.username = splitString[0];
-        this.password = splitString[1];
+        this.username = username;
+        this.password = password;
 
     }
 
