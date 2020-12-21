@@ -14,76 +14,103 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
     private final ByteBuffer messageOpcode = ByteBuffer.allocate(2);
     private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
     private int len = 0;
-    private boolean first0=true;//todo change name
+    private int zeroCouner=0;
 
     @Override
     public Message decodeNextByte(byte nextByte) {
         opcode.put(nextByte);
         if (!opcode.hasRemaining()) { //we read 4 bytes and therefore can take the length
             opcode.flip();
+
+            //we are reading AdminReg Message
             if (opcode.getShort()==1){//todo make general
                 opcode.clear();
                 return decodeNextByteAdminReg(nextByte);
             }
+
+            //we are reading StudentReg Message
             else if (opcode.getShort()==2){//todo make general
                 opcode.clear();
                 return decodeNextByteStudentReg(nextByte);
             }
+
+            //we are reading LOGIN Message
             else if (opcode.getShort()==3){//todo make general
                 opcode.clear();
                 return decodeNextByteLOGIN(nextByte);
             }
+
+            //we are reading Logout Message
             else if (opcode.getShort()==4){//todo make general
                 opcode.clear();
                 return new LogoutMessage();
             }
+
+            //we are reading CourseReg Message
             else if (opcode.getShort()==5){//todo make general
                 opcode.clear();
-                return new LogoutMessage();
+                return decodeNextByteCouseReg(nextByte);
             }
+
+            //we are reading KdamCheck Message
             else if (opcode.getShort()==6){//todo make general
                 opcode.clear();
                 return decodeNextByteKdamCheck(nextByte);
             }
+
+            //we are reading CourseStat Message
             else if (opcode.getShort()==7){//todo make general
                 opcode.clear();
                 return decodeNextByteCourseStat(nextByte);
             }
+
+            //we are reading StudentStat Message
             else if (opcode.getShort()==8){//todo make general
                 opcode.clear();
                 return decodeNextByteStudentStat(nextByte);
             }
+
+            //we are reading IsRegistered Message
             else if (opcode.getShort()==9){//todo make general
                 opcode.clear();
-                return decodeNextByteIsRegisered(nextByte);
+                return decodeNextByteIsRegistered(nextByte);
             }
+
+            //we are reading Unregister Message
             else if (opcode.getShort()==10){//todo make general
                 opcode.clear();
                 return decodeNextByteUnregister(nextByte);
             }
+
+            //we are reading MyCourses Message
             else if (opcode.getShort()==11){//todo make general
                 opcode.clear();
                 return new MyCoursesMessage();
             }
+
+            //we are reading Ack Message
             else if (opcode.getShort()==12){//todo make general
                 opcode.clear();
                 return decodeNextByteAckMessage(nextByte);
             }
+
+            //we are reading Error Message
             else if (opcode.getShort()==13){//todo make general
                 opcode.clear();
                 return decodeNextByteErrorMessage(nextByte);
             }
+
         }
         return null;
     }
 
     public Message decodeNextByteAdminReg(byte nextByte) {
         if (nextByte==0){
-            if (first0){
-                first0=false;
+            if (zeroCouner==0){
+                zeroCouner++;
             }
             else {
-                first0=true;
+                zeroCouner=0;
                 String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
                 String[] splitString = decodedString.split("0");
                 String username = splitString[0];
@@ -99,11 +126,11 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
 
     public Message decodeNextByteStudentReg(byte nextByte) {
         if (nextByte==0){
-            if (first0){
-                first0=false;
+            if (zeroCouner==0){
+                zeroCouner++;
             }
             else {
-                first0=true;
+                zeroCouner=0;
                 return new StudentRegMessage(bytes,len);
             }
         }
@@ -114,15 +141,28 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
 
     public Message decodeNextByteLOGIN(byte nextByte) {
         if (nextByte==0){
-            if (first0){
-                first0=false;
+            if (zeroCouner==0){
+                zeroCouner++;
             }
             else {
-                first0=true;
+                zeroCouner=0;
                 return new LoginMessage(bytes,len);
             }
         }
         pushByte(nextByte);
+        return null;
+    }
+
+    public Message decodeNextByteCouseReg(byte nextByte) {
+        if (courseNum.hasRemaining()) {
+            courseNum.put(nextByte);
+            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+                courseNum.flip();//todo check if needed
+                CourseRegMessage output=new CourseRegMessage(courseNum.getInt());
+                courseNum.clear();
+                return output;
+            }
+        }
         return null;
     }
 
@@ -161,7 +201,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
         return null; //not a line yet
     }
 
-    public Message decodeNextByteIsRegisered(byte nextByte) {
+    public Message decodeNextByteIsRegistered(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
             if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
