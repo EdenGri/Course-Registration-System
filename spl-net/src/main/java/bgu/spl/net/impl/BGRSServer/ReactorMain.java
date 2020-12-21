@@ -15,7 +15,7 @@ public class ReactorMain {
                 port, //port
                 () -> new MessagingProtocolImpl(database), //protocol factory
                 MessageEncoderDecoderImpl::new //message encoder decoder factory
-        ).serve();{
+        ).serve();
         }
     }
-}
+

@@ -9,6 +9,9 @@ package bgu.spl.net.api;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
+    private String username;
+    private String password;
+    private volatile boolean;
 
 
     //to prevent user from creating new Database
@@ -19,7 +22,9 @@ public class Database {
     /**
      * Retrieves the single instance of this class.
      */
+
     public static Database getInstance() {
+
         return Singleton.instance;
     }
 

@@ -1,6 +1,7 @@
 package bgu.spl.net.api;
 import bgu.spl.net.api.Database;
 import bgu.spl.net.api.Message;
+import bgu.spl.net.api.Messages.*;
 
 public class MessagingProtocolImpl implements MessagingProtocol<Message>{
 
@@ -13,13 +14,18 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message>{
     }
 
     @Override
-    public Message process(Message msg) {
-        return null;
-        //TODO
+    public Message process(Message message) {
+
+        if(message instanceof AdminRegMessage || message instanceof StudentRegMessage){
+
+        }
+
+
     }
 
     @Override
     public boolean shouldTerminate() {
+
         return shouldTerminate;
     }
 }
