@@ -9,12 +9,13 @@ import java.util.Arrays;
 
 public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
     //todo check if is this byte buffer is the best solution
+    //todo check if there is more elegant way than if else..
     private final ByteBuffer opcode = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
     private final ByteBuffer messageOpcode = ByteBuffer.allocate(2);
     private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
     private int len = 0;
-    private int zeroCouner=0;
+    private int zeroCounter=0;
 
     @Override
     public Message decodeNextByte(byte nextByte) {
@@ -106,11 +107,11 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
 
     public Message decodeNextByteAdminReg(byte nextByte) {
         if (nextByte==0){
-            if (zeroCouner==0){
-                zeroCouner++;
+            if (zeroCounter==0){
+                zeroCounter++;
             }
             else {
-                zeroCouner=0;
+                zeroCounter=0;
                 String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
                 String[] splitString = decodedString.split("0");
                 String username = splitString[0];
@@ -126,11 +127,11 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
 
     public Message decodeNextByteStudentReg(byte nextByte) {
         if (nextByte==0){
-            if (zeroCouner==0){
-                zeroCouner++;
+            if (zeroCounter==0){
+                zeroCounter++;
             }
             else {
-                zeroCouner=0;
+                zeroCounter=0;
                 return new StudentRegMessage(bytes,len);
             }
         }
@@ -141,11 +142,11 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
 
     public Message decodeNextByteLOGIN(byte nextByte) {
         if (nextByte==0){
-            if (zeroCouner==0){
-                zeroCouner++;
+            if (zeroCounter==0){
+                zeroCounter++;
             }
             else {
-                zeroCouner=0;
+                zeroCounter=0;
                 return new LoginMessage(bytes,len);
             }
         }
@@ -269,7 +270,46 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
     }
 
     @Override
-    public byte[] encode(Object message) {
-        return new byte[0];
+    public byte[] encode(Object message) {//todo what if the object is not non of this types?
+        byte[] result;
+        if (message instanceof AdminRegMessage){
+
+        }
+        else if (message instanceof StudentRegMessage){
+
+        }
+        else if (message instanceof LoginMessage){
+
+        }
+        else if (message instanceof LogoutMessage){
+
+        }
+        else if (message instanceof CourseRegMessage){
+
+        }
+        else if (message instanceof KdamCheckMessage){
+
+        }
+        else if (message instanceof CourseStatMessage){
+
+        }
+        else if (message instanceof StudentStatMessage){
+
+        }
+        else if (message instanceof IsRegisteredMessage){
+
+        }
+        else if (message instanceof UnregisterMessage){
+
+        }
+        else if (message instanceof MyCoursesMessage){
+
+        }
+        else if (message instanceof AckMessage){
+
+        }
+        else if (message instanceof ErrorMessage){
+
+        }
     }
 }
