@@ -1,5 +1,7 @@
-package bgu.spl.net.api;
+package bgu.spl.net.impl.BGRSServer;
 
+import bgu.spl.net.api.Message;
+import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.api.Messages.*;
 
 
@@ -7,7 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
+public class MessageEncoderDecoderImpl implements MessageEncoderDecoder {
     //todo check if is this byte buffer is the best solution
     //todo check if there is more elegant way than if else..
     private final ByteBuffer opcode = ByteBuffer.allocate(2);
@@ -282,61 +284,49 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder{
     @Override
     public byte[] encode(Object message) {//todo what if the object is not non of this types?
         //todo how utf8 ?
-        if (message instanceof AdminRegMessage){
-            String userName= ((AdminRegMessage) message).getUsername();
-            byte[] userNameBytes= userName.getBytes();
-            String password=((AdminRegMessage) message).getPassword();
-            byte[] passwordBytes= password.getBytes();
+        if (message instanceof AdminRegMessage) {
+            String userName = ((AdminRegMessage) message).getUsername();
+            byte[] userNameBytes = userName.getBytes();
+            String password = ((AdminRegMessage) message).getPassword();
+            byte[] passwordBytes = password.getBytes();
             //initialize the result with the appropriate length
             // the appropriate length needs to be the sum of userName length, password length, 2 bytes for opcode and 2 bytes for 2 zero "0"
-            byte[] result=new byte[userNameBytes.length+passwordBytes.length+4];
-            byte[] opcode=ByteBuffer.allocate(2).putInt(1).array();
+            byte[] result = new byte[userNameBytes.length + passwordBytes.length + 4];
+            byte[] opcode = ByteBuffer.allocate(2).putInt(1).array();
             //add opcode to result
-            System.arraycopy(opcode,0,result,0,opcode.length);
+            System.arraycopy(opcode, 0, result, 0, opcode.length);
             //add userName to result
-            System.arraycopy(userNameBytes,0,result,opcode.length,userNameBytes.length);
+            System.arraycopy(userNameBytes, 0, result, opcode.length, userNameBytes.length);
             //add 0 to result
-            result[opcode.length+userNameBytes.length]=0;
+            result[opcode.length + userNameBytes.length] = 0;
             //add password to result
-            System.arraycopy(userNameBytes,0,result,opcode.length,userNameBytes.length);
+            System.arraycopy(userNameBytes, 0, result, opcode.length, userNameBytes.length);
             //add 0 to result
-            result[opcode.length+userNameBytes.length+passwordBytes.length]=0;
+            result[opcode.length + userNameBytes.length + passwordBytes.length] = 0;
             return result;
-        }
-        else if (message instanceof StudentRegMessage){
+        } else if (message instanceof StudentRegMessage) {
 
-        }
-        else if (message instanceof LoginMessage){
+        } else if (message instanceof LoginMessage) {
 
-        }
-        else if (message instanceof LogoutMessage){
+        } else if (message instanceof LogoutMessage) {
 
-        }
-        else if (message instanceof CourseRegMessage){
+        } else if (message instanceof CourseRegMessage) {
 
-        }
-        else if (message instanceof KdamCheckMessage){
+        } else if (message instanceof KdamCheckMessage) {
 
-        }
-        else if (message instanceof CourseStatMessage){
+        } else if (message instanceof CourseStatMessage) {
 
-        }
-        else if (message instanceof StudentStatMessage){
+        } else if (message instanceof StudentStatMessage) {
 
-        }
-        else if (message instanceof IsRegisteredMessage){
+        } else if (message instanceof IsRegisteredMessage) {
 
-        }
-        else if (message instanceof UnregisterMessage){
+        } else if (message instanceof UnregisterMessage) {
 
-        }
-        else if (message instanceof MyCoursesMessage){
+        } else if (message instanceof MyCoursesMessage) {
 
-        }
-        else if (message instanceof AckMessage){
+        } else if (message instanceof AckMessage) {
 
-        }
-        else if (message instanceof ErrorMessage){
+        } else if (message instanceof ErrorMessage) {
 
         }
     }

@@ -1,4 +1,6 @@
-package bgu.spl.net.api;
+package bgu.spl.net.impl.RegistrationSystem;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Passive object representing the Database where all courses and users are stored.
@@ -9,9 +11,9 @@ package bgu.spl.net.api;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-    private String username;
-    private String password;
-    private volatile boolean;
+    private ConcurrentHashMap<String, User> users;
+    private ConcurrentHashMap<Integer, Course> courses;
+
 
 
     //to prevent user from creating new Database
