@@ -5,13 +5,11 @@ import java.util.LinkedList;
 public abstract class User {
     private String username;
     private String password;
-    private boolean isRegistered; //todo remove maybe?
     private volatile boolean isLoggedIn;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        isRegistered = true;
         isLoggedIn = false;
     }
 
@@ -27,5 +25,6 @@ public abstract class User {
     public String getPassword() {
         return password;
     }
+    public boolean isLoggedIn(){return isLoggedIn;}
 
 }

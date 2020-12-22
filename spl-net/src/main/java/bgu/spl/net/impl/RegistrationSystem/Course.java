@@ -6,6 +6,7 @@ public class Course {
     private String courseName;
     private int courseNum;
     private LinkedList<Course> kdamCourses; //todo change to array of ints?
+    private LinkedList<Student> registeredStudents;
     private int numOfMaxStudents;
     private int numOfCurrStudents;
 
