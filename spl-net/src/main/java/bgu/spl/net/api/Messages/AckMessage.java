@@ -2,15 +2,11 @@ package bgu.spl.net.api.Messages;
 
 import bgu.spl.net.api.Message;
 
-public class AckMessage implements Message {
-    private short opcode;
+public class AckMessage extends ServerToClientMessage {
 
-    public AckMessage(short opcode){
-        this.opcode = opcode;
+    public AckMessage(short MessageOpcode) {
+        super(MessageOpcode);
     }
 
-    public short getOpcode(){
-        return opcode;
-    }
 }
 

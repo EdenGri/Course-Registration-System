@@ -2,14 +2,10 @@ package bgu.spl.net.api.Messages;
 
 import bgu.spl.net.api.Message;
 
-public class ErrorMessage implements Message {
-    private short opcode;
+public class ErrorMessage extends ServerToClientMessage {
 
-    public ErrorMessage(short opcode){
-        this.opcode = opcode;
+    public ErrorMessage(short MessageOpcode){
+        super(MessageOpcode);
     }
 
-    public short getOpcode() {
-        return opcode;
-    }
 }
