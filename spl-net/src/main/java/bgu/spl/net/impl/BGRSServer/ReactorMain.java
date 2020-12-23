@@ -1,8 +1,6 @@
 package bgu.spl.net.impl.BGRSServer;
 
-import bgu.spl.net.api.Database;
-import bgu.spl.net.api.MessageEncoderDecoderImpl;
-import bgu.spl.net.api.MessagingProtocolImpl;
+import bgu.spl.net.impl.RegistrationSystem.Database;
 import bgu.spl.net.srv.Server;
 
 public class ReactorMain {
@@ -15,7 +13,7 @@ public class ReactorMain {
                 port, //port
                 () -> new MessagingProtocolImpl(database), //protocol factory
                 MessageEncoderDecoderImpl::new //message encoder decoder factory
-        ).serve();{
+        ).serve();
         }
     }
-}
+

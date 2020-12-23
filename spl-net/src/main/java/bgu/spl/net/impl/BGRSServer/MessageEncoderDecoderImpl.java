@@ -1,5 +1,7 @@
 package bgu.spl.net.api;
 
+import bgu.spl.net.api.Message;
+import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.api.Messages.*;
 
 
