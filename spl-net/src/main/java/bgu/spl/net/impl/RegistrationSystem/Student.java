@@ -14,11 +14,15 @@ public class Student extends User {
     }
 
     public boolean registerCourse(int courseNum){
-        //todo check if there is room and etc to register student
+        return false;//todo check if there is room and etc to register student
     }
 
     public Set<Integer> getRegisteredCourses() {
         return registeredCourses.keySet();
 
     }
+    public boolean haveAllKdamCourses(Course course){
+        return false;
+    }
+
 }

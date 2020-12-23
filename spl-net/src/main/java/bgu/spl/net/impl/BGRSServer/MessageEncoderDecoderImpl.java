@@ -334,7 +334,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
     private byte[] createOpcode(Message message) {
         if (message instanceof AckMessage) {
-            return ByteBuffer.allocate(2).putInt(12).array();
+            return ByteBuffer.allocate(2).putInt(12).array();//todo needs to be short
         } else if (message instanceof ErrorMessage) {
             return ByteBuffer.allocate(2).putInt(13).array();
         }

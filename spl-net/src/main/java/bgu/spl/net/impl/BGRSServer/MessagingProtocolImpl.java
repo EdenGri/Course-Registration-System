@@ -14,27 +14,23 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
 
     private boolean shouldTerminate;
     private Database database;
+    private String userName;
 
 
     public MessagingProtocolImpl(Database database){
         this.database = database;
         shouldTerminate = false;
+        userName=null;//todo how we get the user name maby in reg
     }
 
     @Override
     public Message process(Message message) {
+        Message response= message.execute(database);
 
-        if (message instanceof AdminRegMessage) {
-            User user = new Admin(((AdminRegMessage) message).getUsername(), ((AdminRegMessage) message).getPassword());
-            this.database = Database.getInstance(); //todo check like this??
-            User toAdd = database.getRegisteredUsers().putIfAbsent(((AdminRegMessage) message).getUsername(), user);
-            if (toAdd != null) {
-                connections.send(connectionId, new ErrorMsg((short) 1)); // todo if already registered send error message
-            } else {
-                //todo should we log him in
-                connections.send(connectionId, new ACKMsgStandart((short) 1)); //todo if successful send ack message
-            }
-        } else if (message instanceof StudentRegMessage) {
+
+
+
+        else if (message instanceof StudentRegMessage) {
             User user = new Student(((StudentRegMessage) message).getUsername(), ((StudentRegMessage) message).getPassword());
             this.database = Database.getInstance();//todo check like this??
             User toAdd = database.getRegisteredUsers().putIfAbsent(((StudentRegMessage) message).getUsername(), user);

@@ -16,4 +16,12 @@ public class Course {
 
         //Todo read this input from courses.txt file?????
     }
+
+    public boolean isAvailable(){
+        return numOfMaxStudents-numOfCurrStudents>0;
+    }
+
+    public LinkedList<Course> getKdamCourses(){
+        return kdamCourses;
+    }
 }

@@ -16,8 +16,8 @@ public class Database {
     private ConcurrentHashMap<String, User> registeredUsers;
     private ConcurrentHashMap<String,User> connectedUsers;
     private ConcurrentHashMap<Integer, Course> courses;
-    private ConcurrentHashMap<User, ConcurrentLinkedQueue<Integer>> usersList;
-    private ConcurrentHashMap<Course, ConcurrentLinkedQueue<String>> coursesList; //todo which version ASKEDEN
+    //private ConcurrentHashMap<User, ConcurrentLinkedQueue<Integer>> usersList;//todo delete?
+    //private ConcurrentHashMap<Course, ConcurrentLinkedQueue<String>> coursesList; //todo delete?
 
 
 
@@ -38,6 +38,9 @@ public class Database {
 
     public ConcurrentHashMap<String, User> getRegisteredUsers() {
         return registeredUsers;
+    }
+    public ConcurrentHashMap<Integer, Course> getCourses() {
+        return courses;
     }
 
     public ConcurrentHashMap<String, User> getConnectedUsers() {

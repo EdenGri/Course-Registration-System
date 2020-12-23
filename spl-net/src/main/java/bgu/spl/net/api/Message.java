@@ -1,5 +1,7 @@
 package bgu.spl.net.api;
 
-public interface Message {
+import bgu.spl.net.impl.RegistrationSystem.Database;
 
+public interface Message {
+    Message execute(Database database);
 }
