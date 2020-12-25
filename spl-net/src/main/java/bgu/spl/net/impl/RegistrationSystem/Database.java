@@ -52,9 +52,25 @@ public class Database {
     public ConcurrentHashMap<String, User> getConnectedUsers() {
         return connectedUsers;
     }
-    public void logoutUser(User user){
+
+    public User UserReg(String userName,User user){
+        return registeredUsers.putIfAbsent(userName,user);
+    }
+
+    public User login(String username,User user){
+        user.login();//todo ask ofry if needed?
+        return connectedUsers.putIfAbsent(username,user);
+    }
+
+    public void logOutUser(User user){
         connectedUsers.remove(user.getName());
     }
+
+
+
+
+
+}
 
 
 

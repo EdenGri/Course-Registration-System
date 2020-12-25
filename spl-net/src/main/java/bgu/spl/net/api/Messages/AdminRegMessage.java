@@ -30,7 +30,7 @@ public class AdminRegMessage implements Message {
     @Override
     public Message execute(Database database, Session session) {
         User user = new Admin(username, password);
-        User toAdd = database.getRegisteredUsers().putIfAbsent(username, user);
+        User toAdd = database.UserReg(username, user);
         if (toAdd != null) {
             return new AckMessage((short)1,null);
         } else {

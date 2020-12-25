@@ -9,17 +9,17 @@ import bgu.spl.net.impl.RegistrationSystem.User;
 import java.nio.charset.StandardCharsets;
 
 public class LoginMessage implements Message {
-    private String username;
+    private String userName;
     private String password;
 
     public LoginMessage(String userName, String password){
         super();
-        this.username = userName;
+        this.userName = userName;
         this.password = password;
     }
 
     public String getUsername(){
-        return username;
+        return userName;
     }
 
     public String getPassword(){
@@ -29,13 +29,12 @@ public class LoginMessage implements Message {
 
     @Override
     public Message execute(Database database, Session session) {
-        User user = database.getRegisteredUsers().get(username);
+        User user = database.getRegisteredUsers().get(userName);
         if (user!=null){
             if (user.getPassword().equals(password)){
-                User toAdd = database.getConnectedUsers().putIfAbsent(username,user);
+                User toAdd = database.login(userName,user);
                 if (toAdd!=null){
                     session.setUser(user);
-                    session.getUser().login();//todo need??
                     return new AckMessage((short)3,null);
                 }
             }

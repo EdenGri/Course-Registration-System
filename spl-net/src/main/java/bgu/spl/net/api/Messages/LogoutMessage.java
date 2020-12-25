@@ -16,8 +16,7 @@ public class LogoutMessage implements Message {
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user != null) {
-            database.getConnectedUsers().remove(user.getName());
-            user.logout();//todo need?
+            database.logOutUser(user);
             return new AckMessage((short) 4, null);
         }
         return new ErrorMessage((short) 4);
