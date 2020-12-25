@@ -21,7 +21,11 @@ public class Course {
         return numOfMaxStudents-numOfCurrStudents>0;
     }
 
-    public LinkedList<Course> getKdamCourses(){
+    public ArrayList<Course> getKdamCourses(){
         return kdamCourses;
+    }
+
+    public CourseStat courseStat(){
+        return new CourseStat()
     }
 }

@@ -1,11 +1,8 @@
 package bgu.spl.net.impl.BGRSServer;
-import bgu.spl.net.impl.RegistrationSystem.Admin;
-import bgu.spl.net.impl.RegistrationSystem.Database;
+import bgu.spl.net.impl.RegistrationSystem.*;
 import bgu.spl.net.api.Message;
 import bgu.spl.net.api.Messages.*;
 import bgu.spl.net.api.MessagingProtocol;
-import bgu.spl.net.impl.RegistrationSystem.Student;
-import bgu.spl.net.impl.RegistrationSystem.User;
 
 
 import java.util.ArrayList;
@@ -14,18 +11,18 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
 
     private boolean shouldTerminate;
     private Database database;
-    private String userName;
+    private Session session;
 
 
     public MessagingProtocolImpl(Database database){
         this.database = database;
         shouldTerminate = false;
-        userName=null;//todo how we get the user name maby in reg
+        session=new Session(null);
     }
 
     @Override
     public Message process(Message message) {
-        Message response= message.execute(database);
+        Message response= message.execute(database,session);
 
 
 

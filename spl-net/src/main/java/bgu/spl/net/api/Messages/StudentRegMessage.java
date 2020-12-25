@@ -1,10 +1,7 @@
 package bgu.spl.net.api.Messages;
 
 import bgu.spl.net.api.Message;
-import bgu.spl.net.impl.RegistrationSystem.Admin;
-import bgu.spl.net.impl.RegistrationSystem.Database;
-import bgu.spl.net.impl.RegistrationSystem.Student;
-import bgu.spl.net.impl.RegistrationSystem.User;
+import bgu.spl.net.impl.RegistrationSystem.*;
 
 import java.nio.charset.StandardCharsets;
 
@@ -29,16 +26,14 @@ public class StudentRegMessage implements Message {
     }
 
     @Override
-    public Message execute(Database database) {
-
+    public Message execute(Database database, Session session) {
         User user = new Student(username, password);
         User toAdd = database.getRegisteredUsers().putIfAbsent(username, user);
         if (toAdd != null) {
-            return new AckMessage((short) 2);//todo need to update the user name maby in optinal
+            return new AckMessage((short) 2,null);
         } else {
             return new ErrorMessage((short) 2);
         }
-
     }
 }
 
