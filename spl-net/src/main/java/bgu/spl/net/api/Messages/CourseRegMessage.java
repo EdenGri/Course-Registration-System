@@ -13,19 +13,8 @@ public class CourseRegMessage implements Message {
     @Override
     public Message execute(Database database, Session session) {
         User user = session.getUser();
-        if (user != null && user instanceof Student) {
-            Course course = database.getCourses().get(courseNum);
-            if (course != null) {
-                if (course.isAvailable()) {
-                    if (((Student) user).haveAllKdamCourses(course)) {
-
-
-
-
-                        return new AckMessage((short) 5, null);
-                    }
-                }
-            }
+        if (database.CourseReg(user, courseNum)) {
+            return new AckMessage<>((short) 5, null);
         }
         return new ErrorMessage((short) 5);
     }

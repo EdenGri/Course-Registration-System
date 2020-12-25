@@ -27,13 +27,16 @@ public class StudentRegMessage implements Message {
 
     @Override
     public Message execute(Database database, Session session) {
-        User user = new Student(username, password);
-        User toAdd = database.UserReg(username, user);
-        if (toAdd != null) {
-            return new AckMessage((short) 2,null);
-        } else {
-            return new ErrorMessage((short) 2);
+        User user = session.getUser();
+        if (user instanceof Admin) {
+            User student = new Student(username, password);
+            User toAdd = database.UserReg(username, student);
+            if (toAdd != null) {
+                return new AckMessage((short) 2, null);
+            }
         }
+        return new ErrorMessage((short) 2);
+
     }
 }
 

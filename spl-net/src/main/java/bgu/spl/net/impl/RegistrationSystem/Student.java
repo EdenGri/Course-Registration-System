@@ -24,5 +24,9 @@ public class Student extends User {
     public boolean haveAllKdamCourses(Course course){
         return false;
     }
+    public String getStudentStat(){
+        return "Student:"+username+"\n"+
+                "Courses:"+getRegisteredCourses();
+    }
 
 }

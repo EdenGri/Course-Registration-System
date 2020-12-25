@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Course {
     private String courseName;
@@ -8,7 +9,7 @@ public class Course {
     private ArrayList<Course> kdamCourses;
     private ArrayList<Student> registeredStudents;
     private int numOfMaxStudents;
-    private int numOfCurrStudents;
+    private AtomicInteger numOfCurrStudents;//todo check
 
     public Course (String courseName, int courseNum){
         this.courseName = courseName;
@@ -17,11 +18,15 @@ public class Course {
         //Todo read this input from courses.txt file?????
     }
 
-    public boolean isAvailable(){
+    public String getCourseName(){
+        return courseName;
+    }
+
+    public boolean isAvailable(){//todo need sync?
         return numOfMaxStudents-numOfCurrStudents>0;
     }
 
-    public int getNumOfCurrStudents() {
+    public AtomicInteger getNumOfCurrStudents() {
         return numOfCurrStudents;
     }
 
@@ -29,7 +34,7 @@ public class Course {
         return numOfMaxStudents;
     }
 
-    public void setNumOfCurrStudents(int numOfCurrStudents) {
+    public void setNumOfCurrStudents(AtomicInteger numOfCurrStudents) {//todo needed?
         this.numOfCurrStudents = numOfCurrStudents;
     }
 
@@ -41,11 +46,23 @@ public class Course {
         return kdamCourses;
     }
 
-    public CourseStat courseStat(){
-        return new CourseStat()
+    public ArrayList<Student> getRegisteredStudents(){
+        return registeredStudents;
     }
+
 
     public void setKdamCourses(ArrayList<Course> kdamCourses) {
         this.kdamCourses = kdamCourses;
+    }
+
+    public String getCourseStat(){
+        String courseStat="Course:("+courseNum+")"+courseName+"\n"+
+                "Seats Available:"+getNumOfCurrStudents()+"/"+getNumOfMaxStudents()+"\n"+
+                "Students Registered:"+getRegisteredStudents();
+        return courseStat;
+    }
+
+    public boolean isRegistered(User user){
+        return registeredStudents.contains(user);
     }
 }

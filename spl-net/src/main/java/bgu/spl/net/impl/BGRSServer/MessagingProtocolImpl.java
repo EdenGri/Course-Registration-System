@@ -22,64 +22,7 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
 
     @Override
     public Message process(Message message) {
-        Message response= message.execute(database,session);
-
-
-
-
-        else if (message instanceof StudentRegMessage) {
-            User user = new Student(((StudentRegMessage) message).getUsername(), ((StudentRegMessage) message).getPassword());
-            this.database = Database.getInstance();//todo check like this??
-            User toAdd = database.getRegisteredUsers().putIfAbsent(((StudentRegMessage) message).getUsername(), user);
-            if (toAdd != null) {
-                connections.send(connectionId, new ErrorMsg((short) 1)); //todo if already registered send error message
-            } else {
-                connections.send(connectionId, new ACKMsgStandart((short) 1)); //todo if successful send ack message
-            }
-        } else if (message instanceof LoginMessage) {
-            this.database = Database.getInstance();//todo check like this??
-            String username = ((LoginMessage) message).getUsername();
-            User user = database.getRegisteredUsers().get(username); //
-            User userToLogin = database.getConnectedUsers().putIfAbsent(username, user);
-            if (user == null || user.isLoggedIn() || !(((LoginMessage) message).getPassword().equals(user.getPassword())) || userToLogin != null)
-                connections.send(connectionId, new ErrorMsg((short) 2)); //todo send error message
-            else {
-                synchronized (user) {
-                    user.login();
-                    //todo send ack message
-                }
-            }
-        } else if (message instanceof LogoutMessage) {
-            this.database = Database.getInstance();//todo check like this?? or we dont need this bc of tcp/reactor server
-            String username = ((LogoutMessage) message).getUsername(); //todo figure out how to get username or user
-            User user = database.getConnectedUsers().get(username);
-            if (user == null || !user.isLoggedIn()) {
-                connections.send(connectionId, new ErrorMsg((short) 3)); //todo send error message
-            } else {
-                synchronized (user) {
-                    user.logout();
-                    database.logoutUser(user);
-                    //todo send ack message
-                }
-            }
-        } else if (message instanceof CourseRegMessage) {
-            this.database = Database.getInstance();//todo check like this?? or we dont need this bc of tcp/reactor server
-
-        } else if (message instanceof KdamCheckMessage) {
-            //TODO
-
-        } else if (message instanceof CourseStatMessage) {
-            //TODO
-        } else if (message instanceof StudentStatMessage) {
-            //TODO
-        } else if (message instanceof IsRegisteredMessage) {
-            //TODO
-        } else if (message instanceof UnregisterMessage) {
-            //TODO
-        } else if (message instanceof MyCoursesMessage) {
-            //TODO
-        }
-
+        return message.execute(database,session);
     }
 
             @Override
