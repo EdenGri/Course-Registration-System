@@ -3,6 +3,7 @@ package bgu.spl.net.impl.RegistrationSystem;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -59,21 +60,34 @@ public class Database {
 
 
     /**
-     * loades the courses from the file path specified
+     * loads the courses from the file path specified
      * into the Database, returns true if successful.
      */
-    boolean initialize(String coursesFilePath) { //todo this part is not finished
-        ArrayList<String> courses;
+    boolean initialize(String coursesFilePath) { //todo can we just change method signature to throw exception
+        ArrayList<String> listOfCourses =
         try {
-            courses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
-        } catch (Exception e){e.printStackTrace();}
+            listOfCourses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
+
+            for (String course : listOfCourses) {
+                String[] splitString = course.split("\\|"); //todo check if only "|"
+                int courseNum = Integer.parseInt(splitString[0]);
+                String courseName = splitString[1];
+                Course addCourse = new Course(courseName,courseNum);
+                courses.put(courseNum,addCourse);
+
+                String kdamCourses = splitString[2];
+                ArrayList kdamCourses =; //TODO
+                addCourse.setKdamCourses(kdamCourses);
 
 
-        for(String course: courses){
-                try{
-                    String[] splitString = course.split("\\|");
-                } catch (Exception e){e.printStackTrace();}
+                int numOfMaxStudents = Integer.parseInt(splitString[3]);
+                addCourse.setNumOfMaxStudents(numOfMaxStudents);
+
+
             }
+        } catch (Exception e){ e.printStackTrace(); // todo return false?}
+
+
         }
     }
 
