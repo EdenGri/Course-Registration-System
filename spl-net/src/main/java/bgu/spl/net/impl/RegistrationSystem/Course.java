@@ -1,12 +1,12 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Course {
     private String courseName;
     private int courseNum;
-    private LinkedList<Course> kdamCourses; //todo change to array of ints?
-    private LinkedList<Student> registeredStudents;
+    private ArrayList<Course> kdamCourses;
+    private ArrayList<Student> registeredStudents;
     private int numOfMaxStudents;
     private int numOfCurrStudents;
 

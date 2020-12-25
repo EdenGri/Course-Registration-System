@@ -1,16 +1,16 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Student extends User {
-    private HashMap<Integer, Course> registeredCourses; //todo check if we need concurrency
+    private ArrayList<Integer> registeredCourses; //todo check if we need concurrency
 
     public Student(String username,String password) {
         super(username, password);
-        registeredCourses = new HashMap<>();
+        registeredCourses = new ArrayList<>();
     }
 
     public boolean registerCourse(int courseNum){
@@ -18,7 +18,7 @@ public class Student extends User {
     }
 
     public Set<Integer> getRegisteredCourses() {
-        return registeredCourses.keySet();
+        return registeredCourses.; //todo
 
     }
     public boolean haveAllKdamCourses(Course course){

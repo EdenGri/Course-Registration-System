@@ -1,8 +1,12 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 
 /**
  * Passive object representing the Database where all courses and users are stored.
@@ -16,9 +20,6 @@ public class Database {
     private ConcurrentHashMap<String, User> registeredUsers;
     private ConcurrentHashMap<String,User> connectedUsers;
     private ConcurrentHashMap<Integer, Course> courses;
-    //private ConcurrentHashMap<User, ConcurrentLinkedQueue<Integer>> usersList;//todo delete?
-    //private ConcurrentHashMap<Course, ConcurrentLinkedQueue<String>> coursesList; //todo delete?
-
 
 
 
@@ -36,6 +37,10 @@ public class Database {
         return Singleton.instance;
     }
 
+    private static class Singleton{
+        private static Database instance = new Database();
+    }
+
     public ConcurrentHashMap<String, User> getRegisteredUsers() {
         return registeredUsers;
     }
@@ -50,19 +55,26 @@ public class Database {
         connectedUsers.remove(user.getName());
     }
 
-    private static class Singleton{
-        private static Database instance = new Database();
-    }
+
 
 
     /**
      * loades the courses from the file path specified
      * into the Database, returns true if successful.
      */
-    boolean initialize(String coursesFilePath) {
-        // TODO: implement
-        return false;
+    boolean initialize(String coursesFilePath) { //todo this part is not finished
+        ArrayList<String> courses;
+        try {
+            courses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
+        } catch (Exception e){e.printStackTrace();}
+
+
+        for(String course: courses){
+                try{
+                    String[] splitString = course.split("\\|");
+                } catch (Exception e){e.printStackTrace();}
+            }
+        }
     }
 
 
-}
