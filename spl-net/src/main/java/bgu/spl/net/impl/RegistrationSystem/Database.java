@@ -2,9 +2,7 @@ package bgu.spl.net.impl.RegistrationSystem;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -92,14 +90,16 @@ public class Database {
                 courses.put(courseNum,addCourse);
 
                 String kdamCourses = splitString[2];
-                ArrayList kdamCourses =; //TODO
-                addCourse.setKdamCourses(kdamCourses);
+                String kdamSubst = kdamCourses.substring(1,kdamCourses.length() - 2); //todo check
+                String[] str = kdamSubst.split(",");
+                List<String> kdamList = new ArrayList<>(Arrays.asList(str));
+                addCourse.setKdamCourses((ArrayList)kdamList);
 
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 addCourse.setNumOfMaxStudents(numOfMaxStudents);
 
-
+                //TODO figure out how to save order of courses in file for studentstat
             }
         } catch (Exception e){ e.printStackTrace(); // todo return false?}
 
