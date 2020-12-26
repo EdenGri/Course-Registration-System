@@ -70,8 +70,9 @@ public class Database {
             if (course != null) {
                 if (((Student) user).haveAllKdamCourses(course)) {
                     if (course.isAvailable()) {
-                        course.getRegisteredStudents().add((Student) user);//todo orderd
+                        course.getRegisteredStudents().add((Student) user);
                         course.getNumOfCurrStudents().incrementAndGet();
+                        ((Student) user).getRegisteredCourses().add(course);
                         return true;
                     }
                 }
@@ -117,12 +118,13 @@ public class Database {
         ArrayList<String> listOfCourses =
         try {
             listOfCourses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
-
+            int line = 1;
             for (String course : listOfCourses) {
                 String[] splitString = course.split("\\|"); //todo check if only "|"
                 int courseNum = Integer.parseInt(splitString[0]);
                 String courseName = splitString[1];
-                Course addCourse = new Course(courseName, courseNum);
+                Course addCourse = new Course(line,courseName, courseNum);
+                line++;
                 courses.put(courseNum, addCourse);
 
                 String kdamCourses = splitString[2];

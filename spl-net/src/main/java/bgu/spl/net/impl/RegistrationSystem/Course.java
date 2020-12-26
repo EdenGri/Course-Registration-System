@@ -1,21 +1,31 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Course {
+    private int serialNum;
     private String courseName;
     private int courseNum;
     private ArrayList<Course> kdamCourses;
-    private ArrayList<Student> registeredStudents;
+    private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
     private AtomicInteger numOfCurrStudents;//todo check
 
-    public Course (String courseName, int courseNum){
+    public Course (int serialNum,String courseName, int courseNum){
+        this.serialNum = serialNum;
         this.courseName = courseName;
         this.courseNum = courseNum;
-
+        Comparator<Student> comp = (Student s1, Student s2) -> (s1.compareTo(s2));
+        registeredStudents=new TreeSet<>(comp);
         //Todo read this input from courses.txt file?????
+    }
+
+    public int getSerialNum(){
+        return serialNum;
     }
 
     public String getCourseName(){
@@ -64,5 +74,9 @@ public class Course {
 
     public boolean isRegistered(User user){
         return registeredStudents.contains(user);
+    }
+
+    public int compareTo(Course c2) {
+        return serialNum-c2.getSerialNum();
     }
 }

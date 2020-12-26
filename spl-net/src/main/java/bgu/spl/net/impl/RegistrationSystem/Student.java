@@ -1,25 +1,23 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Student extends User {
-    private ArrayList<Integer> registeredCourses; //todo check if we need concurrency
+    private SortedSet<Course> registeredCourses;//todo check if we need concurrency
 
     public Student(String username,String password) {
         super(username, password);
-        registeredCourses = new ArrayList<>();
+        Comparator<Course> comp = (Course c1, Course c2) -> (c1.compareTo(c2));
+        registeredCourses=new TreeSet<>(comp);
     }
 
     public boolean registerCourse(int courseNum){
         return false;//todo check if there is room and etc to register student
     }
 
-    public Set<Integer> getRegisteredCourses() {
-        return registeredCourses.; //todo
-
+    public SortedSet<Course> getRegisteredCourses() {
+        return registeredCourses; //todo
     }
     public boolean haveAllKdamCourses(Course course){
         return false;
@@ -29,4 +27,7 @@ public class Student extends User {
                 "Courses:"+getRegisteredCourses();
     }
 
+    public int compareTo(Student s2) {
+        return this.username.compareTo(s2.getName());
+    }
 }
