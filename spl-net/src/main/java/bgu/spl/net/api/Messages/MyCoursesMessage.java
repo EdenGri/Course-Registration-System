@@ -12,10 +12,10 @@ public class MyCoursesMessage implements Message {
         User user= session.getUser();
         if (user!=null){
             if (user instanceof Student) {
-                String myCourses=((Student) user).getRegisteredCoursesToString();
+                String myCourses=((Student)user).getRegisteredCoursesToString();
                 return new AckMessage<>((short) 11,myCourses);
             }
         }
-        return new ErrorMessage((short)11);//todo needs to send error?
+        return new ErrorMessage((short)11);//todo needs to send error?    YES HUN i think so;)
     }
 }

@@ -68,7 +68,7 @@ public class Course {
     public String getCourseStat(){
         String courseStat="Course:("+courseNum+")"+courseName+"\n"+
                 "Seats Available:"+getNumOfCurrStudents()+"/"+getNumOfMaxStudents()+"\n"+
-                "Students Registered:"+getRegisteredStudents();
+                "Students Registered:"+getRegisteredStudents(); //TODO turn registered students to string
         return courseStat;
     }
 

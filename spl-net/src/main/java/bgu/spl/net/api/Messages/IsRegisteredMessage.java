@@ -13,6 +13,8 @@ public class IsRegisteredMessage implements Message {
         this.courseNum=courseNum;
     }
 
+    //TODO : if student sends course num that doesn't exist return error , aLso is user is not logged in return error, also check forum for my qs
+
     @Override
     public Message execute(Database database, Session session) {
         User user = session.getUser();

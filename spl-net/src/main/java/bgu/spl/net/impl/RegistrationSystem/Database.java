@@ -80,17 +80,18 @@ public class Database {
         }
         return false;
     }
+    //todo check if the student was never registered to the course should we send back an error? FORum
 
     public boolean CourseUnregistered(User user, int courseNum) {//todo add sync
+        boolean output = false;
         if (user != null && user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
-                course.getRegisteredStudents().remove((Student) user);
+                output = course.getRegisteredStudents().remove((Student) user);
                 course.getNumOfCurrStudents().decrementAndGet();
-                return true;
             }
         }
-        return false;
+        return output;
     }
 
     public String getCourseStat(int courseNum) {

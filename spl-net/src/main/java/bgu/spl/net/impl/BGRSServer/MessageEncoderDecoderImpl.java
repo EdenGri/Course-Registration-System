@@ -325,6 +325,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
         } else*/
 
+            //TODO ACK message optional part
 
         //Initialize result with 4 bytes, 2 for the opcode and the other 2 for the MessageOpcode
         byte[] result = new byte[4];//todo how to add the optional part

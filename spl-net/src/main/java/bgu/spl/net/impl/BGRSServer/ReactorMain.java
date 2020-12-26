@@ -10,7 +10,7 @@ public class ReactorMain {
         int port = Integer.parseInt(args[0]);
         int threads = Integer.parseInt(args[1]);
 
-        Server.threadPerClient(threads,
+        Server.reactor(threads,
                 port, //port
                 () -> new MessagingProtocolImpl(database), //protocol factory
                 MessageEncoderDecoderImpl::new //message encoder decoder factory
