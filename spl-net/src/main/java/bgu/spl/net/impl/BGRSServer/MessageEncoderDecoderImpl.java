@@ -83,7 +83,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         else if (opcode.getShort() == 11) {//todo make general
             return new MyCoursesMessage();
         }
-
+/*
         //we are reading Ack Message
         else if (opcode.getShort() == 12) {//todo make general
             return decodeNextByteAckMessage(nextByte);
@@ -93,6 +93,8 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         else if (opcode.getShort() == 13) {//todo make general
             return decodeNextByteErrorMessage(nextByte);
         }
+
+ */
         return null;
     }
 
@@ -224,7 +226,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
-
+/*
     public Message decodeNextByteAckMessage(byte nextByte) {
         if (messageOpcode.hasRemaining()) {
             messageOpcode.put(nextByte);
@@ -250,6 +252,8 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
+
+ */
 
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {

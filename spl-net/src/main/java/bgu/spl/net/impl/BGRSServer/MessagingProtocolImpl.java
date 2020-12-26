@@ -27,7 +27,6 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
 
             @Override
     public boolean shouldTerminate() {
-
         return shouldTerminate;
     }
 }
