@@ -15,9 +15,18 @@ public class Student extends User {
     public SortedSet<Course> getRegisteredCourses() {
         return registeredCourses; //todo need?
     }
-    public boolean haveAllKdamCourses(Course course){//todo
-        return false;
+
+    public boolean haveAllKdamCourses(Database database,Course course){
+        ArrayList<String> NumOfKdamCourses = course.getNumOfKdamCourses();
+        for (String num:NumOfKdamCourses){
+            Course kdamCourse= database.getCourses().get(num);
+            if (!registeredCourses.contains(kdamCourse)){
+                return false;
+            }
+        }
+        return true;
     }
+
     public String getStudentStat(){
         return "Student:"+username+"\n"+
                 "Courses:"+getRegisteredCoursesToString();

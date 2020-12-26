@@ -83,7 +83,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         else if (opcode.getShort() == 11) {//todo make general
             return new MyCoursesMessage();
         }
-
+/*
         //we are reading Ack Message
         else if (opcode.getShort() == 12) {//todo make general
             return decodeNextByteAckMessage(nextByte);
@@ -93,6 +93,8 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         else if (opcode.getShort() == 13) {//todo make general
             return decodeNextByteErrorMessage(nextByte);
         }
+
+ */
         return null;
     }
 
@@ -224,34 +226,34 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
+/*
+    public Message decodeNextByteAckMessage(byte nextByte) {
+        if (messageOpcode.hasRemaining()) {
+            messageOpcode.put(nextByte);
+            if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
+                messageOpcode.flip();
+                AckMessage output = new AckMessage(messageOpcode.getShort());
+                clearAll();
+                return output;
+            }
+        }
+        return null;
+    }
 
-    //TODO check if we need this decode & check if we need to encode all others except ack and error
+    public Message decodeNextByteErrorMessage(byte nextByte) {
+        if (messageOpcode.hasRemaining()) {
+            messageOpcode.put(nextByte);
+            if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
+                messageOpcode.flip();
+                ErrorMessage output = new ErrorMessage(messageOpcode.getShort());
+                clearAll();
+                return output;
+            }
+        }
+        return null;
+    }
 
-//    public Message decodeNextByteAckMessage(byte nextByte) {
-//        if (messageOpcode.hasRemaining()) {
-//            messageOpcode.put(nextByte);
-//            if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-//                messageOpcode.flip();
-//                AckMessage output = new AckMessage(messageOpcode.getShort());
-//                clearAll();
-//                return output;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public Message decodeNextByteErrorMessage(byte nextByte) {
-//        if (messageOpcode.hasRemaining()) {
-//            messageOpcode.put(nextByte);
-//            if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-//                messageOpcode.flip();
-//                ErrorMessage output = new ErrorMessage(messageOpcode.getShort());
-//                clearAll();
-//                return output;
-//            }
-//        }
-//        return null;
-//    }
+ */
 
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
