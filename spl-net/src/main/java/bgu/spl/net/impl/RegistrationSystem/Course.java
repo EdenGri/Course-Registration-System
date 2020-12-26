@@ -10,7 +10,7 @@ public class Course {
     private int serialNum;
     private String courseName;
     private int courseNum;
-    private ArrayList<Course> kdamCourses;
+    private SortedSet<Course> kdamCourses;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
     private AtomicInteger numOfCurrStudents;//todo check
@@ -19,8 +19,10 @@ public class Course {
         this.serialNum = serialNum;
         this.courseName = courseName;
         this.courseNum = courseNum;
-        Comparator<Student> comp = (Student s1, Student s2) -> (s1.compareTo(s2));
-        registeredStudents=new TreeSet<>(comp);
+        Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
+        registeredStudents=new TreeSet<>(comp1);
+        Comparator<Course> comp2 = (Course c1, Course c2) -> (c1.compareTo(c2));
+        kdamCourses=new TreeSet<>(comp2);
         //Todo read this input from courses.txt file?????
     }
 
@@ -33,7 +35,7 @@ public class Course {
     }
 
     public boolean isAvailable(){//todo need sync?
-        return numOfMaxStudents-numOfCurrStudents>0;
+        return numOfMaxStudents-numOfCurrStudents.get()>0;
     }
 
     public AtomicInteger getNumOfCurrStudents() {
@@ -56,7 +58,7 @@ public class Course {
         return kdamCourses;
     }
 
-    public ArrayList<Student> getRegisteredStudents(){
+    public SortedSet<Student> getRegisteredStudents(){
         return registeredStudents;
     }
 
