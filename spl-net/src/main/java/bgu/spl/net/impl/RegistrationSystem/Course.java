@@ -22,7 +22,6 @@ public class Course {
         Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
         registeredStudents=new TreeSet<>(comp1);
         kdamCourses=new ArrayList<>();
-        //Todo read this input from courses.txt file?????
     }
 
     public int getSerialNum(){

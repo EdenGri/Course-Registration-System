@@ -31,7 +31,7 @@ public class AdminRegMessage implements Message {
     public Message execute(Database database, Session session) {
         User user = new Admin(username, password);
         User toAdd = database.UserReg(username, user);
-        if (toAdd != null) {
+        if (toAdd == null) { //todo not opposite?
             return new AckMessage((short)1,null);
         } else {
             return new ErrorMessage((short)1);

@@ -128,6 +128,8 @@ public class Database {
                 String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 2); //todo check
                 String[] str = kdamSubst.split(",");
                 List<String> kdamList = new ArrayList<>(Arrays.asList(str));
+
+
                 addCourse.setKdamCourses((ArrayList) kdamList);
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);

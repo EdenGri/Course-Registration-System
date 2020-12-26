@@ -14,6 +14,8 @@ public class StudentStatMessage implements Message {
         this.StudentUserName=userName;
     }
 
+    //todo check if admin and if so return error
+
     @Override
     public Message execute(Database database, Session session) {
         String studentStat=database.getStudentStat(StudentUserName);
