@@ -17,9 +17,9 @@ public class Student extends User {
     }
 
     public boolean haveAllKdamCourses(Course course){//todo
-        ArrayList<String> kdamCourses = course.getKdamCourses();
-        for (String courseNum:kdamCourses){
-            if (!registeredCourses.contains(course)){
+        SortedSet<Course> kdamCourses = course.getKdamCourses();
+        for (Course c:kdamCourses){
+            if (!registeredCourses.contains(c)){
                 return false;
             }
         }
