@@ -10,7 +10,7 @@ public class Course {
     private int serialNum;
     private String courseName;
     private int courseNum;
-    private SortedSet<Course> kdamCourses;
+    private ArrayList<String> kdamCourses;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
     private AtomicInteger numOfCurrStudents;//todo check
@@ -21,8 +21,7 @@ public class Course {
         this.courseNum = courseNum;
         Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
         registeredStudents=new TreeSet<>(comp1);
-        Comparator<Course> comp2 = (Course c1, Course c2) -> (c1.compareTo(c2));
-        kdamCourses=new TreeSet<>(comp2);
+        kdamCourses=new ArrayList<>();
         //Todo read this input from courses.txt file?????
     }
 
@@ -54,7 +53,7 @@ public class Course {
         this.numOfMaxStudents = numOfMaxStudents;
     }
 
-    public SortedSet<Course> getKdamCourses(){
+    public ArrayList<String> getKdamCourses(){
         return kdamCourses;
     }
 
@@ -63,7 +62,7 @@ public class Course {
     }
 
 
-    public void setKdamCourses(SortedSet<Course> kdamCourses) {
+    public void setKdamCourses(ArrayList<String> kdamCourses) {
         this.kdamCourses = kdamCourses;
     }
 
@@ -80,5 +79,9 @@ public class Course {
 
     public int compareTo(Course c2) {
         return serialNum-c2.getSerialNum();
+    }
+
+    public int getCourseNum() {
+        return courseNum;
     }
 }

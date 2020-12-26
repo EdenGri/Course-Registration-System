@@ -12,19 +12,25 @@ public class Student extends User {
         registeredCourses=new TreeSet<>(comp);
     }
 
-    public boolean registerCourse(int courseNum){
-        return false;//todo check if there is room and etc to register student
-    }
-
     public SortedSet<Course> getRegisteredCourses() {
-        return registeredCourses; //todo
+        return registeredCourses; //todo need?
     }
-    public boolean haveAllKdamCourses(Course course){
+    public boolean haveAllKdamCourses(Course course){//todo
         return false;
     }
     public String getStudentStat(){
         return "Student:"+username+"\n"+
-                "Courses:"+getRegisteredCourses();
+                "Courses:"+getRegisteredCoursesToString();
+    }
+
+    public String getRegisteredCoursesToString() {
+        String output="[";
+        for (Course course: registeredCourses){
+            output.concat(course.getCourseNum()+",");
+        }
+        output.substring(0,output.length()-1);//remove the last ","
+        output.concat("]");
+        return output;
     }
 
     public int compareTo(Student s2) {

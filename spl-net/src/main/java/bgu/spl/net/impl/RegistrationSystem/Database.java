@@ -130,7 +130,6 @@ public class Database {
                 List<String> kdamList = new ArrayList<>(Arrays.asList(str));
                 addCourse.setKdamCourses((ArrayList) kdamList);
 
-
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 addCourse.setNumOfMaxStudents(numOfMaxStudents);
 
