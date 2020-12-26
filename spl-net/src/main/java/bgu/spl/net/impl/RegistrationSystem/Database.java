@@ -107,15 +107,12 @@ public class Database {
     }
 
 
-}
-
-
     /**
      * loads the courses from the file path specified
      * into the Database, returns true if successful.
      */
     boolean initialize(String coursesFilePath) { //todo can we just change method signature to throw exception
-        ArrayList<String> listOfCourses =
+        ArrayList<String> listOfCourses;
         try {
             listOfCourses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
             int line = 1;
@@ -123,7 +120,7 @@ public class Database {
                 String[] splitString = course.split("\\|"); //todo check if only "|"
                 int courseNum = Integer.parseInt(splitString[0]);
                 String courseName = splitString[1];
-                Course addCourse = new Course(line,courseName, courseNum);
+                Course addCourse = new Course(line, courseName, courseNum);
                 line++;
                 courses.put(courseNum, addCourse);
 
@@ -140,10 +137,13 @@ public class Database {
                 //TODO figure out how to save order of courses in file for studentstat
             }
         } catch (Exception e) {
-            e.printStackTrace(); // todo return false?}
-
+            e.printStackTrace();
+            return false;
 
         }
+        return true;
     }
+
+}
 
 

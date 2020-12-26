@@ -54,7 +54,7 @@ public class Course {
         this.numOfMaxStudents = numOfMaxStudents;
     }
 
-    public ArrayList<Course> getKdamCourses(){
+    public SortedSet<Course> getKdamCourses(){
         return kdamCourses;
     }
 
@@ -63,7 +63,7 @@ public class Course {
     }
 
 
-    public void setKdamCourses(ArrayList<Course> kdamCourses) {
+    public void setKdamCourses(SortedSet<Course> kdamCourses) {
         this.kdamCourses = kdamCourses;
     }
 
