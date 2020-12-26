@@ -16,7 +16,7 @@ public class KdamCheckMessage implements Message {
     public Message execute(Database database, Session session) {
         Course course = database.getCourses().get(courseNum);
         if (course!=null){
-            return new AckMessage((short)6,course.getKdamCourses().toString());
+            return new AckMessage((short)6,course.getNumOfKdamCourses().toString());//todo need "[]"?
         }
         return new ErrorMessage((short)6);
     }

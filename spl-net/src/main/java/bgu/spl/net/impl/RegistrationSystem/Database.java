@@ -68,7 +68,7 @@ public class Database {
         if (user != null && user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
-                if (((Student) user).haveAllKdamCourses(course)) {
+                if (((Student) user).haveAllKdamCourses(this,course)) {
                     if (course.isAvailable()) {
                         course.getRegisteredStudents().add((Student) user);
                         course.getNumOfCurrStudents().incrementAndGet();
@@ -128,7 +128,7 @@ public class Database {
                 String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 2); //todo check
                 String[] str = kdamSubst.split(",");
                 List<String> kdamList = new ArrayList<>(Arrays.asList(str));
-                addCourse.setKdamCourses((ArrayList) kdamList);
+                addCourse.setNumOfKdamCourses((ArrayList) kdamList);
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 addCourse.setNumOfMaxStudents(numOfMaxStudents);

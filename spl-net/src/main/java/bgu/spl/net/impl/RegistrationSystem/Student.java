@@ -16,10 +16,11 @@ public class Student extends User {
         return registeredCourses; //todo need?
     }
 
-    public boolean haveAllKdamCourses(Course course){//todo
-        SortedSet<Course> kdamCourses = course.getKdamCourses();
-        for (Course c:kdamCourses){
-            if (!registeredCourses.contains(c)){
+    public boolean haveAllKdamCourses(Database database,Course course){
+        ArrayList<String> NumOfKdamCourses = course.getNumOfKdamCourses();
+        for (String num:NumOfKdamCourses){
+            Course kdamCourse= database.getCourses().get(num);
+            if (!registeredCourses.contains(kdamCourse)){
                 return false;
             }
         }
