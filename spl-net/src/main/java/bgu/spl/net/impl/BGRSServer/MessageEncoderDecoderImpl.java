@@ -30,67 +30,67 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
 
         //we are reading AdminReg Message
-        if (opcode.getShort() == 1) {//todo make general
+        if (opcode.getShort() == 1) {
             return decodeNextByteAdminReg(nextByte);
         }
 
         //we are reading StudentReg Message
-        else if (opcode.getShort() == 2) {//todo make general
+        else if (opcode.getShort() == 2) {
             return decodeNextByteStudentReg(nextByte);
         }
 
         //we are reading LOGIN Message
-        else if (opcode.getShort() == 3) {//todo make general
+        else if (opcode.getShort() == 3) {
             return decodeNextByteLOGIN(nextByte);
         }
 
         //we are reading Logout Message
-        else if (opcode.getShort() == 4) {//todo make general
+        else if (opcode.getShort() == 4) {
             return new LogoutMessage();
         }
 
         //we are reading CourseReg Message
-        else if (opcode.getShort() == 5) {//todo make general
+        else if (opcode.getShort() == 5) {
             return decodeNextByteCourseReg(nextByte);
         }
 
         //we are reading KdamCheck Message
-        else if (opcode.getShort() == 6) {//todo make general
+        else if (opcode.getShort() == 6) {
             return decodeNextByteKdamCheck(nextByte);
         }
 
         //we are reading CourseStat Message
-        else if (opcode.getShort() == 7) {//todo make general
+        else if (opcode.getShort() == 7) {
             return decodeNextByteCourseStat(nextByte);
         }
 
         //we are reading StudentStat Message
-        else if (opcode.getShort() == 8) {//todo make general
+        else if (opcode.getShort() == 8) {
             return decodeNextByteStudentStat(nextByte);
         }
 
         //we are reading IsRegistered Message
-        else if (opcode.getShort() == 9) {//todo make general
+        else if (opcode.getShort() == 9) {
             return decodeNextByteIsRegistered(nextByte);
         }
 
         //we are reading Unregister Message
-        else if (opcode.getShort() == 10) {//todo make general
+        else if (opcode.getShort() == 10) {
             return decodeNextByteUnregister(nextByte);
         }
 
         //we are reading MyCourses Message
-        else if (opcode.getShort() == 11) {//todo make general
+        else if (opcode.getShort() == 11) {
             return new MyCoursesMessage();
         }
 /*
         //we are reading Ack Message
-        else if (opcode.getShort() == 12) {//todo make general
+        else if (opcode.getShort() == 12) {//todo needed?
             return decodeNextByteAckMessage(nextByte);
         }
 
         //we are reading Error Message
-        else if (opcode.getShort() == 13) {//todo make general
+        else if (opcode.getShort() == 13) {//todo needed?
             return decodeNextByteErrorMessage(nextByte);
         }
 
@@ -325,16 +325,27 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
         } else*/
 
-            //TODO ACK message optional part
 
-        //Initialize result with 4 bytes, 2 for the opcode and the other 2 for the MessageOpcode
-        byte[] result = new byte[4];//todo how to add the optional part
         byte[] opcode = createOpcode(message);
         byte[] MessageOpcode = createMessageOpcode(message);
+        byte[] responseBytes = null;
+        //OutputSize will be at least 4 bytes, 2 for the opcode and the other 2 for the MessageOpcode
+        int outputSize = 4;
+        //add the optional part at AckMessage
+        if (message instanceof AckMessage) {
+            String response = ((AckMessage<String>) message).getResponse();
+            responseBytes = response.getBytes();
+            outputSize = outputSize + responseBytes.length;
+        }
+        byte[] output = new byte[outputSize];
         //add opcode and MessageOpcode to result
-        System.arraycopy(opcode, 0, result, 0, opcode.length);
-        System.arraycopy(MessageOpcode, 0, result, opcode.length, MessageOpcode.length);
-        return result;
+        System.arraycopy(opcode, 0, output, 0, opcode.length);
+        System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
+        //add the optional part at AckMessage
+        if (message instanceof AckMessage) {
+            System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
+        }
+        return output;
     }
 
     private byte[] createOpcode(Message message) {

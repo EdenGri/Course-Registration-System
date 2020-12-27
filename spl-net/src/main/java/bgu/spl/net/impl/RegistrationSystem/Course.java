@@ -68,8 +68,18 @@ public class Course {
     public String getCourseStat(){
         String courseStat="Course:("+courseNum+")"+courseName+"\n"+
                 "Seats Available:"+getNumOfCurrStudents()+"/"+getNumOfMaxStudents()+"\n"+
-                "Students Registered:"+getRegisteredStudents(); //TODO turn registered students to string
+                "Students Registered:"+getRegisteredStudentsToString();
         return courseStat;
+    }
+
+    private String getRegisteredStudentsToString() {
+        String output = "[";
+        for (Student student:registeredStudents){
+            output.concat(student.getName()+",");
+        }
+        output.substring(0,output.length()-1);//remove the last ","
+        output.concat("]");
+        return output;
     }
 
     public boolean isRegistered(User user){

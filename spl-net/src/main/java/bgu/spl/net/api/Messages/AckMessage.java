@@ -2,13 +2,17 @@ package bgu.spl.net.api.Messages;
 
 import bgu.spl.net.api.Message;
 
-public class AckMessage<T> extends ServerToClientMessage {
+public class AckMessage<String> extends ServerToClientMessage {
 
-    private T Response;
+    private String response;
 
-    public AckMessage(short MessageOpcode, T response) {
+    public AckMessage(short MessageOpcode, String response) {
         super(MessageOpcode);
-        Response = response;
+        this.response = response;
+    }
+
+    public String getResponse(){
+        return response;
     }
 
 }
