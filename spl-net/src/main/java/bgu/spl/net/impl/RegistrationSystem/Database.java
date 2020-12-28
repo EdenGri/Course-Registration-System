@@ -49,7 +49,7 @@ public class Database {
         return courses;
     }
 
-    public ConcurrentHashMap<String, User> getConnectedUsers() {
+    public ConcurrentHashMap<String, User> getConnectedUsers() {//todo need?
         return connectedUsers;
     }
 
@@ -125,9 +125,10 @@ public class Database {
                 String courseName = splitString[1];
                 Course addCourse = new Course(line, courseName, courseNum);
                 line++;
-                courses.put(courseNum, addCourse);
+                courses.putIfAbsent(courseNum, addCourse);//todo chang to put?
                 //TODO check for cases we didnt think about
                 String kdamCourses = splitString[2];
+                //we check if the kdamCourses not empty list of "[]"
                 if(kdamCourses.length() > 2) {
                     String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);
                     String[] str = kdamSubst.split(",");
@@ -137,8 +138,6 @@ public class Database {
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 addCourse.setNumOfMaxStudents(numOfMaxStudents);
-
-                //TODO figure out how to save order of courses in file for student stat
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,7 +146,6 @@ public class Database {
         }
         return true;
     }
-
 }
 
 
