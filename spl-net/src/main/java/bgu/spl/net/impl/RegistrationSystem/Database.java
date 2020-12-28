@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-    private final static String coursesPath ="./Courses.txt";
+    private final static String coursesPath ="Courses.txt"; //TODO check if ok like this when running in VM & courses location
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, User> connectedUsers = new ConcurrentHashMap<>(); //TODO check if need this?
     private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();
