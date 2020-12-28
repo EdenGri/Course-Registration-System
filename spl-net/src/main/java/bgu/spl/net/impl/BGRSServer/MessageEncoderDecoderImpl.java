@@ -346,7 +346,6 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, opcode.length + MessageOpcode.length+responseBytes.length);
             }
             System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
-
             return output;
         }
         else if (message instanceof ErrorMessage) {
