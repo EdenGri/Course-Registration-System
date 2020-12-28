@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-    private final static String coursesPath = "Courses.txt";
+    private final static String coursesPath ="./Courses.txt";
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, User> connectedUsers = new ConcurrentHashMap<>(); //TODO check if need this?
     private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();
@@ -113,6 +113,7 @@ public class Database {
      * loads the courses from the file path specified
      * into the Database, returns true if successful.
      */
+
     boolean initialize(String coursesFilePath) { //todo can we just change method signature to throw exception
         ArrayList<String> listOfCourses;
         try {
@@ -125,17 +126,19 @@ public class Database {
                 Course addCourse = new Course(line, courseName, courseNum);
                 line++;
                 courses.put(courseNum, addCourse);
-
+                //TODO check for cases we didnt think about
                 String kdamCourses = splitString[2];
-                String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 2); //todo check
-                String[] str = kdamSubst.split(",");
-                List<String> kdamList = new ArrayList<>(Arrays.asList(str));
-                addCourse.setNumOfKdamCourses((ArrayList) kdamList);
+                if(kdamCourses.length() > 2) {
+                    String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);
+                    String[] str = kdamSubst.split(",");
+                    List<String> kdamList = new ArrayList<>(Arrays.asList(str));
+                    addCourse.setNumOfKdamCourses((ArrayList)kdamList);
+                }
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 addCourse.setNumOfMaxStudents(numOfMaxStudents);
 
-                //TODO figure out how to save order of courses in file for studentstat
+                //TODO figure out how to save order of courses in file for student stat
             }
         } catch (Exception e) {
             e.printStackTrace();
