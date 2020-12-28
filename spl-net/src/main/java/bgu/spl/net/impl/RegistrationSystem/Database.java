@@ -66,22 +66,23 @@ public class Database {
     }
 
     public boolean CourseReg(User user, int courseNum) {
+        boolean output=false;
         if (user != null && user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
                 if (((Student) user).haveAllKdamCourses(this,course)) {
                     if (course.isAvailable()) {
-                        course.getRegisteredStudents().add((Student) user);
-                        course.getNumOfCurrStudents().incrementAndGet();
-                        ((Student) user).getRegisteredCourses().add(course);
-                        return true;
+                        output = course.getRegisteredStudents().add((Student) user);
+                        if (output) {
+                            course.getNumOfCurrStudents().incrementAndGet();
+                            ((Student) user).getRegisteredCourses().add(course);
+                        }
                     }
                 }
             }
         }
-        return false;
+        return output;
     }
-    //todo check if the student was never registered to the course should we send back an error? FORum
 
     public boolean CourseUnregistered(User user, int courseNum) {//todo add sync
         boolean output = false;
@@ -89,7 +90,9 @@ public class Database {
             Course course = courses.get(courseNum);
             if (course != null) {
                 output = course.getRegisteredStudents().remove((Student) user);
-                course.getNumOfCurrStudents().decrementAndGet();
+                if (output) {
+                    course.getNumOfCurrStudents().decrementAndGet();
+                }
             }
         }
         return output;

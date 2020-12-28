@@ -13,17 +13,21 @@ public class IsRegisteredMessage implements Message {
         this.courseNum=courseNum;
     }
 
-    //TODO : if student sends course num that doesn't exist return error , aLso is user is not logged in return error, also check forum for my qs
-
+    //todo check what if admin asks
     @Override
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user!=null){
             Course course=database.getCourses().get(courseNum);
-            if (course.isRegistered(user)){
-                return new AckMessage<>((short)9,"REGISTERED");
+            if (course!=null) {
+                if (course.isRegistered(user)) {
+                    return new AckMessage<>((short) 9, "REGISTERED");
+                }
+                else {
+                    return new AckMessage<>((short) 9, "NOT REGISTERED");
+                }
             }
         }
-        return new AckMessage<>((short)9,"NOT REGISTERED");//todo dont sure if needs to return ack
+        return new ErrorMessage((short)9);
     }
 }

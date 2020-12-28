@@ -1,4 +1,4 @@
-package bgu.spl.net.api;
+package bgu.spl.net.impl.BGRSServer;
 
 import bgu.spl.net.api.Message;
 import bgu.spl.net.api.MessageEncoderDecoder;
@@ -14,7 +14,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     //todo check if there is more elegant way than if else..
     private final ByteBuffer opcode = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
-    private final ByteBuffer messageOpcode = ByteBuffer.allocate(2);
+    //private final ByteBuffer messageOpcode = ByteBuffer.allocate(2);//todo need?
     private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
     private int len = 0;
     private int zeroCounter = 0;
@@ -276,7 +276,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         zeroCounter = 0;
         opcode.clear();
         courseNum.clear();
-        messageOpcode.clear();
+        // messageOpcode.clear();//todo delete?
     }
 
     @Override
@@ -325,40 +325,59 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
         } else*/
 
-
+        //todo check more elegant way for combine bytearray
+        //todo maybe to split error and ack
         byte[] opcode = createOpcode(message);
         byte[] MessageOpcode = createMessageOpcode(message);
-        byte[] responseBytes = null;
-        //OutputSize will be at least 4 bytes, 2 for the opcode and the other 2 for the MessageOpcode
-        int outputSize = 4;
-        //add the optional part at AckMessage
+        int outputSize = 0;
         if (message instanceof AckMessage) {
             String response = ((AckMessage<String>) message).getResponse();
-            responseBytes = response.getBytes();
-            outputSize = outputSize + responseBytes.length;
+            byte[] responseBytes = null;
+            if (response != null) {
+                responseBytes = response.getBytes();
+                outputSize = opcode.length + MessageOpcode.length + responseBytes.length;
+            }
+            outputSize++;//for the last "0"  byte
+            byte[] output = new byte[outputSize];
+            System.arraycopy(opcode, 0, output, 0, opcode.length);
+            System.arraycopy(MessageOpcode, 0, output, opcode.length, opcode.length + MessageOpcode.length);
+            //add the optional part at AckMessage
+            if (responseBytes != null) {
+                System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, opcode.length + MessageOpcode.length+responseBytes.length);
+            }
+            System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
+
+            return output;
         }
-        byte[] output = new byte[outputSize];
-        //add opcode and MessageOpcode to result
-        System.arraycopy(opcode, 0, output, 0, opcode.length);
-        System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
-        //add the optional part at AckMessage
-        if (message instanceof AckMessage) {
-            System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
+        else if (message instanceof ErrorMessage) {
+            outputSize = opcode.length + MessageOpcode.length;
+            byte[] output = new byte[outputSize];
+            System.arraycopy(opcode, 0, output, 0, opcode.length);
+            System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
+            return output;
         }
-        return output;
+        return null;//todo what to return if the message is not ack or error
     }
 
     private byte[] createOpcode(Message message) {
         if (message instanceof AckMessage) {
-            return ByteBuffer.allocate(2).putInt(12).array();//todo needs to be short
+            return shortToBytes((short) 12);
         } else if (message instanceof ErrorMessage) {
-            return ByteBuffer.allocate(2).putInt(13).array();
+            return shortToBytes((short) 13);
         }
         return null;//todo what to return if the message is not ack or error
     }
 
     private byte[] createMessageOpcode(Message message) {//todo what to return if the message is not ServerToClientMessage
         Short MessageOpcode = ((ServerToClientMessage) message).getMessageOpcode();
-        return ByteBuffer.allocate(2).putShort(MessageOpcode).array();
+        return shortToBytes(MessageOpcode);
     }
+
+    public byte[] shortToBytes(short num) {
+        byte[] bytesArr = new byte[2];
+        bytesArr[0] = (byte) ((num >> 8) & 0xFF);
+        bytesArr[1] = (byte) (num & 0xFF);
+        return bytesArr;
+    }
+
 }
