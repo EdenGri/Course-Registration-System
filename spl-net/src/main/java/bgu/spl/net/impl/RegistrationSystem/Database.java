@@ -16,14 +16,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-    private ConcurrentHashMap<String, User> registeredUsers;
-    private ConcurrentHashMap<String, User> connectedUsers;
-    private ConcurrentHashMap<Integer, Course> courses;
+    private final static String coursesPath = "Courses.txt";
+    private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, User> connectedUsers = new ConcurrentHashMap<>(); //TODO check if need this?
+    private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();
 
 
     //to prevent user from creating new Database
     private Database() {
-        // TODO: implement
+        initialize(coursesPath);
     }
 
     /**
