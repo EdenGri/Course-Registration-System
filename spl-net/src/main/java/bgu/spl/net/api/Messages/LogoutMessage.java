@@ -17,6 +17,7 @@ public class LogoutMessage implements Message {
         if (user != null) {
             database.logoutUser(user); //todo check if after logout we dont need to turn user to null in session???
             MessagingProtocolImpl.terminate(); //todo change
+            session.setUser(null); //todo check
             return new AckMessage((short) 4, null);
         }
         return new ErrorMessage((short) 4);
