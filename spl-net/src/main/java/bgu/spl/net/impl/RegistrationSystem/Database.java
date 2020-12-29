@@ -61,7 +61,7 @@ public class Database {
         return connectedUsers.putIfAbsent(username, user);
     }
 
-    public void logOutUser(User user) {
+    public void logoutUser(User user) {
         connectedUsers.remove(user.getName());
     }
 

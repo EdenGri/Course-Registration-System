@@ -20,11 +20,11 @@ public class LoginMessage implements Message {
 
     public String getUsername(){
         return userName;
-    }
+    } //todo need? didnt we do this in user?
 
     public String getPassword(){
         return password;
-    }
+    } //todo need? didnt we do this in user?
 
 
     @Override

@@ -11,14 +11,12 @@ public class LogoutMessage implements Message {
     public LogoutMessage() {
     }
 
-    ;
-
     @Override
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user != null) {
-            database.logOutUser(user);
-            MessagingProtocolImpl.terminate();
+            database.logoutUser(user); //todo check if after logout we dont need to turn user to null in session???
+            MessagingProtocolImpl.terminate(); //todo change
             return new AckMessage((short) 4, null);
         }
         return new ErrorMessage((short) 4);

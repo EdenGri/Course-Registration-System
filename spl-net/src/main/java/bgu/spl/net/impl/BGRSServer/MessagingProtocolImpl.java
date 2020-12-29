@@ -8,8 +8,7 @@ import bgu.spl.net.api.MessagingProtocol;
 import java.util.ArrayList;
 
 public class MessagingProtocolImpl implements MessagingProtocol<Message> {
-
-    private static boolean shouldTerminate;
+    private boolean shouldTerminate;
     private Database database;
     private Session session;
 
@@ -25,7 +24,7 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
         return message.execute(database,session);
     }
 
-    public static void terminate() {
+    public void terminate() {
         shouldTerminate = true;
     }
 
