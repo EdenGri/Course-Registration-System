@@ -49,7 +49,7 @@ public class Database {
         return courses;
     }
 
-    public ConcurrentHashMap<String, User> getConnectedUsers() {
+    public ConcurrentHashMap<String, User> getConnectedUsers() {//todo need?
         return connectedUsers;
     }
 
@@ -66,22 +66,23 @@ public class Database {
     }
 
     public boolean CourseReg(User user, int courseNum) {
+        boolean output=false;
         if (user != null && user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
                 if (((Student) user).haveAllKdamCourses(this,course)) {
                     if (course.isAvailable()) {
-                        course.getRegisteredStudents().add((Student) user);
-                        course.getNumOfCurrStudents().incrementAndGet();
-                        ((Student) user).getRegisteredCourses().add(course);
-                        return true;
+                        output = course.getRegisteredStudents().add((Student) user);
+                        if (output) {
+                            course.getNumOfCurrStudents().incrementAndGet();
+                            ((Student) user).getRegisteredCourses().add(course);
+                        }
                     }
                 }
             }
         }
-        return false;
+        return output;
     }
-    //todo check if the student was never registered to the course should we send back an error? FORum
 
     public boolean CourseUnregistered(User user, int courseNum) {//todo add sync
         boolean output = false;
@@ -89,7 +90,9 @@ public class Database {
             Course course = courses.get(courseNum);
             if (course != null) {
                 output = course.getRegisteredStudents().remove((Student) user);
-                course.getNumOfCurrStudents().decrementAndGet();
+                if (output) {
+                    course.getNumOfCurrStudents().decrementAndGet();
+                }
             }
         }
         return output;
@@ -125,9 +128,10 @@ public class Database {
                 String courseName = splitString[1];
                 Course addCourse = new Course(line, courseName, courseNum);
                 line++;
-                courses.put(courseNum, addCourse);
+                courses.putIfAbsent(courseNum, addCourse);//todo chang to put?
                 //TODO check for cases we didnt think about
                 String kdamCourses = splitString[2];
+                //we check if the kdamCourses not empty list of "[]"
                 if(kdamCourses.length() > 2) {
                     String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);
                     String[] str = kdamSubst.split(",");
@@ -137,8 +141,6 @@ public class Database {
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 addCourse.setNumOfMaxStudents(numOfMaxStudents);
-
-                //TODO figure out how to save order of courses in file for student stat
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,7 +149,6 @@ public class Database {
         }
         return true;
     }
-
 }
 
 

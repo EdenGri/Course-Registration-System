@@ -11,7 +11,6 @@ public abstract class User {
         this.password = password;
     }
 
-
     public String getName(){
         return username;
     }
