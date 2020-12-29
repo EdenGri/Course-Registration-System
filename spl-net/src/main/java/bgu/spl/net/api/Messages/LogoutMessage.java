@@ -15,7 +15,6 @@ public class LogoutMessage implements Message {
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user != null) {
-            database.logoutUser(user);
             session.setUser(null);
             session.setShouldLogout(true);
             return new AckMessage((short) 4, null);

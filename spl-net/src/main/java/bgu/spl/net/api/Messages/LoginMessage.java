@@ -32,8 +32,7 @@ public class LoginMessage implements Message {
         User user = database.getRegisteredUsers().get(userName);
         if (user!=null){
             if (user.getPassword().equals(password)){
-                User toAdd = database.login(userName,user);
-                if (toAdd==null){
+                if (session.getUser()==null){
                     session.setUser(user);
                     return new AckMessage((short)3,null);
                 }
