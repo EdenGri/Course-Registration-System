@@ -10,7 +10,7 @@ public class Course {
     private int serialNum;
     private String courseName;
     private int courseNum;
-    private ArrayList<String> NumOfKdamCourses;
+    private ArrayList<String> kdamCoursesList;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
     private AtomicInteger numOfCurrStudents;//todo check
@@ -21,7 +21,7 @@ public class Course {
         this.courseNum = courseNum;
         Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
         registeredStudents=new TreeSet<>(comp1);
-        NumOfKdamCourses=new ArrayList<>();
+        kdamCoursesList =new ArrayList<>();
     }
 
     public int getSerialNum(){
@@ -52,8 +52,8 @@ public class Course {
         this.numOfMaxStudents = numOfMaxStudents;
     }
 
-    public ArrayList<String> getNumOfKdamCourses(){
-        return NumOfKdamCourses;
+    public ArrayList<String> getKdamCoursesList(){
+        return kdamCoursesList;
     }
 
     public SortedSet<Student> getRegisteredStudents(){
@@ -61,8 +61,8 @@ public class Course {
     }
 
 
-    public void setNumOfKdamCourses(ArrayList<String> NumOfKdamCourses) {
-        this.NumOfKdamCourses = NumOfKdamCourses;
+    public void setKdamCoursesList(ArrayList<String> NumOfKdamCourses) {
+        this.kdamCoursesList = NumOfKdamCourses;
     }
 
     public String getCourseStat(){
@@ -72,13 +72,14 @@ public class Course {
         return courseStat;
     }
 
+    //TODO check output = something
     private String getRegisteredStudentsToString() {
         String output = "[";
-        for (Student student:registeredStudents){
-            output.concat(student.getName()+",");
+        for (Student student:registeredStudents){ //todo shouldnt we check its not empty?
+            output = output.concat(student.getName()+",");
         }
-        output.substring(0,output.length()-1);//remove the last ","
-        output.concat("]");
+       output = output.substring(0,output.length()-1);//remove the last ","
+       output = output.concat("]");
         return output;
     }
 

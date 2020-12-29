@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -126,7 +125,7 @@ public class Database {
                     String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);
                     String[] str = kdamSubst.split(",");
                     List<String> kdamList = new ArrayList<>(Arrays.asList(str));
-                    addCourse.setNumOfKdamCourses((ArrayList)kdamList);
+                    addCourse.setKdamCoursesList((ArrayList)kdamList);
                 }
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);

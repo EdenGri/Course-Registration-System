@@ -1,7 +1,6 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Student extends User {
     private SortedSet<Course> registeredCourses;//todo check if we need concurrency
@@ -17,9 +16,9 @@ public class Student extends User {
     }
 
     public boolean haveAllKdamCourses(Database database,Course course){
-        ArrayList<String> NumOfKdamCourses = course.getNumOfKdamCourses();
-        for (String num:NumOfKdamCourses){
-            Course kdamCourse= database.getCourses().get(num);
+        ArrayList<String> KdamCourses = course.getKdamCoursesList();
+        for (String num:KdamCourses){
+            Course kdamCourse= database.getCourses().get(Integer.parseInt(num));
             if (!registeredCourses.contains(kdamCourse)){
                 return false;
             }
@@ -31,14 +30,14 @@ public class Student extends User {
         return "Student:"+username+"\n"+
                 "Courses:"+getRegisteredCoursesToString();
     }
-
+        //TODO eden check all output = something
     public String getRegisteredCoursesToString() {
         String output="[";
-        for (Course course: registeredCourses){
-            output.concat(course.getCourseNum()+",");
+        for (Course course: registeredCourses){ //todo shouldnt we check its not empty?
+            output = output.concat(course.getCourseNum()+",");
         }
-        output.substring(0,output.length()-1);//remove the last ","
-        output.concat("]");
+        output = output.substring(0,output.length()-1);//remove the last ","
+        output = output.concat("]");
         return output;
     }
 
