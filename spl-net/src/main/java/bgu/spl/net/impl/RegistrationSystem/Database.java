@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Database {
     private final static String coursesPath ="Courses.txt"; //TODO check if ok like this when running in VM & courses location
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, User> connectedUsers = new ConcurrentHashMap<>();//todo needed?
     private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();//todo needs why concurrent?
 
 
@@ -49,20 +48,8 @@ public class Database {
         return courses;
     }
 
-    public ConcurrentHashMap<String, User> getConnectedUsers() {//todo need?
-        return connectedUsers;
-    }//todo need?
-
     public User UserReg(String userName, User user) {
         return registeredUsers.putIfAbsent(userName, user);
-    }
-
-    public User login(String username, User user) {
-        return connectedUsers.putIfAbsent(username, user);
-    }//todo need?
-
-    public void logoutUser(User user) {
-        connectedUsers.remove(user.getName());
     }
 
     public boolean CourseReg(User user, int courseNum) {
