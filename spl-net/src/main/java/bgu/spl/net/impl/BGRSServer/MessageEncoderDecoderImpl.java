@@ -12,7 +12,8 @@ import java.util.Arrays;
 public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message> {
     //todo check if is this byte buffer is the best solution
     //todo check if there is more elegant way than if else..
-    private final ByteBuffer opcode = ByteBuffer.allocate(2);
+    private  short opcode=-1;
+    private final ByteBuffer opcodeBuffer = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
     //private final ByteBuffer messageOpcode = ByteBuffer.allocate(2);//todo need?
     private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
@@ -21,66 +22,67 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
     @Override
     public Message decodeNextByte(byte nextByte) {
-        if (opcode.hasRemaining()) {
-            opcode.put(nextByte);
-            if (!opcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-                opcode.flip();
+        if (opcode==-1) {
+            opcodeBuffer.put(nextByte);
+            if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes and therefore can take the length
+                opcodeBuffer.flip();
+                opcode=opcodeBuffer.getShort();
             }
             return null;
         }
 
         //we are reading AdminReg Message
-        if (opcode.getShort() == 1) {
+        if (opcode == 1) {
             return decodeNextByteAdminReg(nextByte);
         }
 
         //we are reading StudentReg Message
-        else if (opcode.getShort() == 2) {
+        else if (opcode == 2) {
             return decodeNextByteStudentReg(nextByte);
         }
 
         //we are reading LOGIN Message
-        else if (opcode.getShort() == 3) {
+        else if (opcode == 3) {
             return decodeNextByteLOGIN(nextByte);
         }
 
         //we are reading Logout Message
-        else if (opcode.getShort() == 4) {
+        else if (opcode == 4) {
             return new LogoutMessage();
         }
 
         //we are reading CourseReg Message
-        else if (opcode.getShort() == 5) {
+        else if (opcode == 5) {
             return decodeNextByteCourseReg(nextByte);
         }
 
         //we are reading KdamCheck Message
-        else if (opcode.getShort() == 6) {
+        else if (opcode== 6) {
             return decodeNextByteKdamCheck(nextByte);
         }
 
         //we are reading CourseStat Message
-        else if (opcode.getShort() == 7) {
+        else if (opcode== 7) {
             return decodeNextByteCourseStat(nextByte);
         }
 
         //we are reading StudentStat Message
-        else if (opcode.getShort() == 8) {
+        else if (opcode == 8) {
             return decodeNextByteStudentStat(nextByte);
         }
 
         //we are reading IsRegistered Message
-        else if (opcode.getShort() == 9) {
+        else if (opcode== 9) {
             return decodeNextByteIsRegistered(nextByte);
         }
 
         //we are reading Unregister Message
-        else if (opcode.getShort() == 10) {
+        else if (opcode== 10) {
             return decodeNextByteUnregister(nextByte);
         }
 
         //we are reading MyCourses Message
-        else if (opcode.getShort() == 11) {
+        else if (opcode== 11) {
             return new MyCoursesMessage();
         }
 /*
@@ -104,7 +106,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
                 zeroCounter++;
             } else {
                 String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
-                String[] splitString = decodedString.split("0");
+                String[] splitString = decodedString.split("\0");
                 String username = splitString[0];
                 String password = splitString[1];
                 clearAll();
@@ -122,7 +124,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
                 zeroCounter++;
             } else {
                 String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
-                String[] splitString = decodedString.split("0");
+                String[] splitString = decodedString.split("\0");
                 String username = splitString[0];
                 String password = splitString[1];
                 clearAll();
@@ -140,7 +142,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
                 zeroCounter++;
             } else {
                 String decodedString = new String(bytes, 0, len, StandardCharsets.UTF_8);
-                String[] splitString = decodedString.split("0");
+                String[] splitString = decodedString.split("\0");
                 String username = splitString[0];
                 String password = splitString[1];
                 clearAll();
@@ -194,7 +196,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         //notice that the top 128 ascii characters have the same representation as their utf-8 counterparts
         //this allow us to do the following comparison
         if (nextByte == 0) {
-            opcode.clear();
+            opcode=-1;
             return new StudentStatMessage(popString());
         }
         pushByte(nextByte);
@@ -274,7 +276,8 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     private void clearAll() {
         len = 0;
         zeroCounter = 0;
-        opcode.clear();
+        opcode=-1;
+        opcodeBuffer.clear();
         courseNum.clear();
         // messageOpcode.clear();//todo delete?
     }
@@ -329,21 +332,21 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         //todo maybe to split error and ack
         byte[] opcode = createOpcode(message);
         byte[] MessageOpcode = createMessageOpcode(message);
-        int outputSize = 0;
+        int outputSize = 4;
         if (message instanceof AckMessage) {
             String response = ((AckMessage<String>) message).getResponse();
             byte[] responseBytes = null;
             if (response != null) {
                 responseBytes = response.getBytes();
-                outputSize = opcode.length + MessageOpcode.length + responseBytes.length;
+                outputSize = outputSize + responseBytes.length;
             }
             outputSize++;//for the last "0"  byte
             byte[] output = new byte[outputSize];
             System.arraycopy(opcode, 0, output, 0, opcode.length);
-            System.arraycopy(MessageOpcode, 0, output, opcode.length, opcode.length + MessageOpcode.length);
+            System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             //add the optional part at AckMessage
             if (responseBytes != null) {
-                System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, opcode.length + MessageOpcode.length+responseBytes.length);
+                System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
             }
             System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
             return output;

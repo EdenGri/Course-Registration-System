@@ -18,8 +18,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Database {
     private final static String coursesPath ="Courses.txt"; //TODO check if ok like this when running in VM & courses location
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, User> connectedUsers = new ConcurrentHashMap<>();
-    private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, User> connectedUsers = new ConcurrentHashMap<>();//todo needed?
+    private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();//todo needs why concurrent?
 
 
     //to prevent user from creating new Database
@@ -51,7 +51,7 @@ public class Database {
 
     public ConcurrentHashMap<String, User> getConnectedUsers() {//todo need?
         return connectedUsers;
-    }
+    }//todo need?
 
     public User UserReg(String userName, User user) {
         return registeredUsers.putIfAbsent(userName, user);
@@ -59,7 +59,7 @@ public class Database {
 
     public User login(String username, User user) {
         return connectedUsers.putIfAbsent(username, user);
-    }
+    }//todo need?
 
     public void logoutUser(User user) {
         connectedUsers.remove(user.getName());
@@ -70,11 +70,14 @@ public class Database {
         if (user != null && user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
+                //todo dont sure about snyc think theres no need
                 if (((Student) user).haveAllKdamCourses(this,course)) {
+                    //todo add sync
                     if (course.isAvailable()) {
                         output = course.getRegisteredStudents().add((Student) user);
                         if (output) {
                             course.getNumOfCurrStudents().incrementAndGet();
+                            //todo until here
                             ((Student) user).getRegisteredCourses().add(course);
                         }
                     }
