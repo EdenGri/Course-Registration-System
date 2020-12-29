@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class MessagingProtocolImpl implements MessagingProtocol<Message> {
 
-    private boolean shouldTerminate;
+    private static boolean shouldTerminate;
     private Database database;
     private Session session;
 
@@ -25,7 +25,11 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
         return message.execute(database,session);
     }
 
-            @Override
+    public static void terminate() {
+        shouldTerminate = true;
+    }
+
+    @Override
     public boolean shouldTerminate() {
         return shouldTerminate;
     }
