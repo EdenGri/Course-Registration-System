@@ -21,7 +21,9 @@ public class MessagingProtocolImpl implements MessagingProtocol<Message> {
 
     @Override
     public Message process(Message message) {
-        return message.execute(database,session);
+        Message response = message.execute(database,session);
+        shouldTerminate=session.getShouldLogout();
+        return response;
     }
 
     public void terminate() {
