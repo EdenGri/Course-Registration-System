@@ -1,10 +1,7 @@
 package bgu.spl.net.api.Messages;
 
 import bgu.spl.net.api.Message;
-import bgu.spl.net.impl.RegistrationSystem.Course;
-import bgu.spl.net.impl.RegistrationSystem.Database;
-import bgu.spl.net.impl.RegistrationSystem.Session;
-import bgu.spl.net.impl.RegistrationSystem.User;
+import bgu.spl.net.impl.RegistrationSystem.*;
 
 public class IsRegisteredMessage implements Message {
     int courseNum;
@@ -17,7 +14,7 @@ public class IsRegisteredMessage implements Message {
     @Override
     public Message execute(Database database, Session session) {
         User user = session.getUser();
-        if (user!=null){
+        if (user!=null & user instanceof Student){
             Course course=database.getCourses().get(courseNum);
             if (course!=null) {
                 if (course.isRegistered(user)) {
