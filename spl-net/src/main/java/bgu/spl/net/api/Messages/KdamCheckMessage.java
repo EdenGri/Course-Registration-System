@@ -4,8 +4,8 @@ import bgu.spl.net.api.Message;
 import bgu.spl.net.impl.RegistrationSystem.*;
 
 public class KdamCheckMessage implements Message {
-    private int courseNum;
-    public KdamCheckMessage(int courseNum){
+    private Short courseNum;
+    public KdamCheckMessage(Short courseNum){
 
         this.courseNum=courseNum;
     }
@@ -16,7 +16,8 @@ public class KdamCheckMessage implements Message {
         if (user instanceof Student) {
             Course course = database.getCourses().get(courseNum);
             if (course != null) {
-                return new AckMessage((short) 6, course.getKdamCoursesList().toString());//todo check the tostring
+                String optional = course.getKdamCoursesList().toString();
+                return new AckMessage((short) 6, optional);//todo check the tostring
             }
         }
         return new ErrorMessage((short)6);

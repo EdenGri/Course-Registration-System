@@ -125,7 +125,7 @@ public class Database {
                 String kdamCourses = splitString[2];
                 //we check if the kdamCourses not empty list of "[]"
                 if(kdamCourses.length() > 2) {
-                    String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);
+                    String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);//TODO CHANGE THE LIST TO COURSES
                     String[] str = kdamSubst.split(",");
                     List<String> kdamList = new ArrayList<>(Arrays.asList(str));
                     addCourse.setKdamCoursesList((ArrayList)kdamList);

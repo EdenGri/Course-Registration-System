@@ -172,7 +172,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             courseNum.put(nextByte);
             if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
                 courseNum.flip();
-                KdamCheckMessage output = new KdamCheckMessage(courseNum.getInt());
+                KdamCheckMessage output = new KdamCheckMessage(courseNum.getShort());
                 clearAll();
                 return output;
             }
@@ -185,7 +185,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             courseNum.put(nextByte);
             if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
                 courseNum.flip();
-                CourseStatMessage output = new CourseStatMessage(courseNum.getInt());
+                CourseStatMessage output = new CourseStatMessage(courseNum.getShort());
                 clearAll();
                 return output;
             }
@@ -209,7 +209,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             courseNum.put(nextByte);
             if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
                 courseNum.flip();
-                IsRegisteredMessage output = new IsRegisteredMessage(courseNum.getInt());
+                IsRegisteredMessage output = new IsRegisteredMessage(courseNum.getShort());
                 clearAll();
                 return output;
             }
@@ -222,7 +222,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             courseNum.put(nextByte);
             if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
                 courseNum.flip();
-                UnregisterMessage output = new UnregisterMessage(courseNum.getInt());
+                UnregisterMessage output = new UnregisterMessage(courseNum.getShort());
                 clearAll();
                 return output;
             }
@@ -348,8 +348,11 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             //add the optional part at AckMessage
             if (responseBytes != null) {
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);//todo check
             }
-            System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
+            else {
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
+            }
             return output;
         }
         else if (message instanceof ErrorMessage) {

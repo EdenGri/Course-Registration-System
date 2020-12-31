@@ -18,7 +18,7 @@ public class Student extends User {
     public boolean haveAllKdamCourses(Database database,Course course){
         ArrayList<String> KdamCourses = course.getKdamCoursesList();
         for (String num:KdamCourses){
-            Course kdamCourse= database.getCourses().get(Integer.parseInt(num));
+            Course kdamCourse= database.getCourses().get(Short.parseShort(num));
             if (!registeredCourses.contains(kdamCourse)){
                 return false;
             }
