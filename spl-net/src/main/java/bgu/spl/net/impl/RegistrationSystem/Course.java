@@ -9,13 +9,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Course {
     private int serialNum;
     private String courseName;
-    private int courseNum;
+    private Short courseNum;
     private ArrayList<String> kdamCoursesList;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
     private AtomicInteger numOfCurrStudents;//todo check
 
-    public Course (int serialNum,String courseName, int courseNum){
+    public Course (int serialNum,String courseName, Short courseNum){
         this.serialNum = serialNum;
         this.courseName = courseName;
         this.courseNum = courseNum;

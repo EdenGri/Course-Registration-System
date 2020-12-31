@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Database {
     private final static String coursesPath ="Courses.txt"; //TODO check if ok like this when running in VM & courses location
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
-    private final  ConcurrentHashMap<Integer, Course> courses = new ConcurrentHashMap<>();//todo needs why concurrent?
+    private final  ConcurrentHashMap<Short, Course> courses = new ConcurrentHashMap<>();//todo needs why concurrent?
 
 
     //to prevent user from creating new Database
@@ -43,7 +43,7 @@ public class Database {
         return registeredUsers;
     }
 
-    public ConcurrentHashMap<Integer, Course> getCourses() {
+    public ConcurrentHashMap<Short, Course> getCourses() {
         return courses;
     }
 
@@ -116,7 +116,7 @@ public class Database {
             int line = 1;
             for (String course : listOfCourses) {
                 String[] splitString = course.split("\\|");
-                int courseNum = Integer.parseInt(splitString[0]);
+                Short courseNum = Short.parseShort(splitString[0]);
                 String courseName = splitString[1];
                 Course addCourse = new Course(line, courseName, courseNum);
                 line++;

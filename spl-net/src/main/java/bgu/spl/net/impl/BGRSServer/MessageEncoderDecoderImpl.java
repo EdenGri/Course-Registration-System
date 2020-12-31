@@ -27,6 +27,15 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes and therefore can take the length
                 opcodeBuffer.flip();
                 opcode=opcodeBuffer.getShort();
+
+                //we are reading Logout Message
+                if (opcode == 4) {
+                    return new LogoutMessage();
+                }
+                //we are reading MyCourses Message
+                else if (opcode== 11) {
+                    return new MyCoursesMessage();
+                }
             }
             return null;
         }
@@ -44,11 +53,6 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         //we are reading LOGIN Message
         else if (opcode == 3) {
             return decodeNextByteLOGIN(nextByte);
-        }
-
-        //we are reading Logout Message
-        else if (opcode == 4) {
-            return new LogoutMessage();
         }
 
         //we are reading CourseReg Message
@@ -81,10 +85,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             return decodeNextByteUnregister(nextByte);
         }
 
-        //we are reading MyCourses Message
-        else if (opcode== 11) {
-            return new MyCoursesMessage();
-        }
+
 /*
         //we are reading Ack Message
         else if (opcode.getShort() == 12) {//todo needed?
@@ -158,7 +159,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             courseNum.put(nextByte);
             if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
                 courseNum.flip();
-                CourseRegMessage output = new CourseRegMessage(courseNum.getInt());
+                CourseRegMessage output = new CourseRegMessage(courseNum.getShort());
                 clearAll();
                 return output;
             }

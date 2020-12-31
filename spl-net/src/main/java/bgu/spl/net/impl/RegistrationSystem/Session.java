@@ -11,7 +11,7 @@ public class Session {
         return user;
     }
     public void setUser(User user){
-        user=user;
+        this.user=user;
     }
     public boolean getShouldLogout(){
         return shouldLogout;
