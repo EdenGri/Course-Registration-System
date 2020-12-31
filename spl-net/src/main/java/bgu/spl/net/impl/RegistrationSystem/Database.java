@@ -51,7 +51,7 @@ public class Database {
         return registeredUsers.putIfAbsent(userName, user);
     }
 
-    public boolean CourseReg(User user, int courseNum) {
+    public boolean CourseReg(User user, Short courseNum) {
         boolean output=false;
         if (user instanceof Student) {
             Course course = courses.get(courseNum);

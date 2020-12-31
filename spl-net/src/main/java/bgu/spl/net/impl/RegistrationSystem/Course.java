@@ -22,6 +22,7 @@ public class Course {
         Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
         registeredStudents=new TreeSet<>(comp1);
         kdamCoursesList =new ArrayList<>();
+        numOfCurrStudents=new AtomicInteger(0);
     }
 
     public int getSerialNum(){
@@ -33,7 +34,7 @@ public class Course {
     }
 
     public boolean isAvailable(){//todo need sync?
-        return numOfMaxStudents-numOfCurrStudents.get()>0;
+        return (numOfMaxStudents-numOfCurrStudents.get())>0;
     }
 
     public AtomicInteger getNumOfCurrStudents() {

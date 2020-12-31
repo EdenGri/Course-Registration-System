@@ -4,9 +4,9 @@ import bgu.spl.net.api.Message;
 import bgu.spl.net.impl.RegistrationSystem.*;
 
 public class CourseRegMessage implements Message {
-    int courseNum;
+    Short courseNum;
 
-    public CourseRegMessage(int courseNum) {
+    public CourseRegMessage(Short courseNum) {
         this.courseNum = courseNum;
     }
 
