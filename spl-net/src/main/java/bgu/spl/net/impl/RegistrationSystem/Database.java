@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -107,26 +106,26 @@ public class Database {
      * into the Database, returns true if successful.
      */
 
-    boolean initialize(String coursesFilePath) { //todo can we just change method signature to throw exception
+    boolean initialize(String coursesFilePath) {
         ArrayList<String> listOfCourses;
         try {
-            listOfCourses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
+            listOfCourses = (ArrayList<String>)Files.readAllLines(Paths.get(coursesFilePath));
             int line = 1;
             for (String course : listOfCourses) {
-                String[] splitString = course.split("\\|"); //todo check if only "|"
+                String[] splitString = course.split("\\|");
                 int courseNum = Integer.parseInt(splitString[0]);
                 String courseName = splitString[1];
                 Course addCourse = new Course(line, courseName, courseNum);
                 line++;
                 courses.putIfAbsent(courseNum, addCourse);//todo chang to put?
-                //TODO check for cases we didnt think about
+
                 String kdamCourses = splitString[2];
                 //we check if the kdamCourses not empty list of "[]"
                 if(kdamCourses.length() > 2) {
                     String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);
                     String[] str = kdamSubst.split(",");
                     List<String> kdamList = new ArrayList<>(Arrays.asList(str));
-                    addCourse.setNumOfKdamCourses((ArrayList)kdamList);
+                    addCourse.setKdamCoursesList((ArrayList)kdamList);
                 }
 
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
