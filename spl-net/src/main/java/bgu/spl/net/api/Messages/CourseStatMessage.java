@@ -14,7 +14,9 @@ public class CourseStatMessage implements Message {
         User user= session.getUser();
         if (user instanceof Admin) {
             String courseStat = database.getCourseStat(courseNum);
-            return new AckMessage<>((short) 7, courseStat);
+            if (courseStat!=null) {
+                return new AckMessage<>((short) 7, courseStat);
+            }
         }
         return new ErrorMessage((short) 7);
     }

@@ -53,7 +53,7 @@ public class Database {
 
     public boolean CourseReg(User user, int courseNum) {
         boolean output=false;
-        if (user != null && user instanceof Student) {
+        if (user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
                 //todo dont sure about snyc think theres no need
@@ -75,7 +75,7 @@ public class Database {
 
     public boolean CourseUnregistered(User user, int courseNum) {//todo add sync
         boolean output = false;
-        if (user != null && user instanceof Student) {
+        if (user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
                 output = course.getRegisteredStudents().remove((Student) user);
@@ -89,7 +89,10 @@ public class Database {
 
     public String getCourseStat(int courseNum) {
         Course course = getCourses().get(courseNum);
-        return course.getCourseStat();
+        if (course!=null) {
+            return course.getCourseStat();
+        }
+        return null;
     }
 
     public String getStudentStat(String StudentUserName) {
