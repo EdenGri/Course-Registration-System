@@ -1,9 +1,7 @@
 package bgu.spl.net.api.Messages;
 
 import bgu.spl.net.api.Message;
-import bgu.spl.net.impl.RegistrationSystem.Course;
-import bgu.spl.net.impl.RegistrationSystem.Database;
-import bgu.spl.net.impl.RegistrationSystem.Session;
+import bgu.spl.net.impl.RegistrationSystem.*;
 
 public class KdamCheckMessage implements Message {
     private int courseNum;
@@ -14,9 +12,12 @@ public class KdamCheckMessage implements Message {
 
     @Override
     public Message execute(Database database, Session session) {
-        Course course = database.getCourses().get(courseNum);
-        if (course!=null){
-            return new AckMessage((short)6,course.getKdamCoursesList().toString());//todo check the tostring
+        User user = session.getUser();
+        if (user instanceof Student) {
+            Course course = database.getCourses().get(courseNum);
+            if (course != null) {
+                return new AckMessage((short) 6, course.getKdamCoursesList().toString());//todo check the tostring
+            }
         }
         return new ErrorMessage((short)6);
     }

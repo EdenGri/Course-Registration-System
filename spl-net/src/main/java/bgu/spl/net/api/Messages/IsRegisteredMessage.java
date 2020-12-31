@@ -14,7 +14,7 @@ public class IsRegisteredMessage implements Message {
     @Override
     public Message execute(Database database, Session session) {
         User user = session.getUser();
-        if (user!=null & user instanceof Student){
+        if (user instanceof Student){
             Course course=database.getCourses().get(courseNum);
             if (course!=null) {
                 if (course.isRegistered(user)) {
