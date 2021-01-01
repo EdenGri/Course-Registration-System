@@ -29,10 +29,12 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
                 //we are reading Logout Message
                 if (opcode == 4) {
+                    clearAll();
                     return new LogoutMessage();
                 }
                 //we are reading MyCourses Message
                 else if (opcode== 11) {
+                    clearAll();
                     return new MyCoursesMessage();
                 }
             }
@@ -196,8 +198,9 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         //notice that the top 128 ascii characters have the same representation as their utf-8 counterparts
         //this allow us to do the following comparison
         if (nextByte == 0) {
-            opcode=-1;
-            return new StudentStatMessage(popString());
+            String studentName = popString();
+            clearAll();
+            return new StudentStatMessage(studentName);
         }
         pushByte(nextByte);
         return null; //not a line yet
