@@ -58,13 +58,15 @@ public class Database {
             if (course != null) {
                 //todo dont sure about snyc think theres no need
                 if (((Student) user).haveAllKdamCourses(this,course)) {
-                    //todo add sync
-                    if (course.isAvailable()) {
-                        output = course.getRegisteredStudents().add((Student) user);
-                        if (output) {
-                            course.getNumOfCurrStudents().incrementAndGet();
-                            //todo until here
-                            ((Student) user).getRegisteredCourses().add(course);
+                    synchronized (course) {
+                        if (course.isAvailable()) {
+                            output = course.getRegisteredStudents().add((Student) user);
+                            if (output) {
+                                course.incrementNumOfCurrStudents();
+                                synchronized (user) {
+                                    ((Student) user).getRegisteredCourses().add(course);
+                                }
+                            }
                         }
                     }
                 }
@@ -78,9 +80,14 @@ public class Database {
         if (user instanceof Student) {
             Course course = courses.get(courseNum);
             if (course != null) {
-                output = course.getRegisteredStudents().remove((Student) user);
-                if (output) {
-                    course.getNumOfCurrStudents().decrementAndGet();
+                synchronized (course) {
+                    output = course.getRegisteredStudents().remove((Student) user);
+                    synchronized (user) {
+                        ((Student) user).getRegisteredCourses().remove(course);
+                    }
+                    if (output) {
+                        course.decrementNumOfCurrStudents();
+                    }
                 }
             }
         }

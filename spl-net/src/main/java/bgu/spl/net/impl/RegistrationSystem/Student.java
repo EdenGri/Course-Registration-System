@@ -11,8 +11,8 @@ public class Student extends User {
         registeredCourses=new TreeSet<>(comp);
     }
 
-    public SortedSet<Course> getRegisteredCourses() {
-        return registeredCourses; //todo need?
+    public SortedSet<Course> getRegisteredCourses() {//TODO CHECK SYNC
+        return registeredCourses;
     }
 
     public boolean haveAllKdamCourses(Database database,Course course){
@@ -25,11 +25,11 @@ public class Student extends User {
         return true;
     }
 
-    public String getStudentStat(){
+    public synchronized String getStudentStat(){
         return "Student:"+username+"\n"+
                 "Courses:"+getRegisteredCoursesToString();
     }
-        //TODO eden check all output = something
+
     public String getRegisteredCoursesToString() {
         String output="[";
         for (Course course: registeredCourses){ //todo shouldnt we check its not empty?

@@ -13,7 +13,7 @@ public class StudentStatMessage implements Message {
 
 
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//todo check sync probably not
         User user=session.getUser();
         if (user instanceof Admin) {
             String studentStat = database.getStudentStat(StudentUserName);

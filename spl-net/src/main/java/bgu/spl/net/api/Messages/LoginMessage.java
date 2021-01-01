@@ -28,7 +28,7 @@ public class LoginMessage implements Message {
 
 
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//todo check sync
         User user = database.getRegisteredUsers().get(userName);
         if (user!=null){
             if (user.getPassword().equals(password)){

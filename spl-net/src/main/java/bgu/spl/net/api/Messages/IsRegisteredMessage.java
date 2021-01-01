@@ -10,9 +10,8 @@ public class IsRegisteredMessage implements Message {
         this.courseNum=courseNum;
     }
 
-    //todo check what if admin asks
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//todo check sync probably no need
         User user = session.getUser();
         if (user instanceof Student){
             Course course=database.getCourses().get(courseNum);

@@ -12,7 +12,7 @@ public class LogoutMessage implements Message {
     }
 
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//todo check sync
         User user = session.getUser();
         if (user != null) {
             session.setUser(null);

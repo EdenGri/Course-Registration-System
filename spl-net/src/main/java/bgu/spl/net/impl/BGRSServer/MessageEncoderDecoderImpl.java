@@ -15,7 +15,6 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     private  short opcode=-1;
     private final ByteBuffer opcodeBuffer = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
-    //private final ByteBuffer messageOpcode = ByteBuffer.allocate(2);//todo need?
     private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
     private int len = 0;
     private int zeroCounter = 0;

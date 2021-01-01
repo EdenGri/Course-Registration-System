@@ -13,7 +13,7 @@ public class Course {
     private SortedSet<Course> kdamCourses;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
-    private AtomicInteger numOfCurrStudents;//todo check
+    private int numOfCurrStudents;//todo check
 
     public Course (int serialNum,String courseName, Short courseNum){
         this.serialNum = serialNum;
@@ -23,7 +23,7 @@ public class Course {
         registeredStudents=new TreeSet<>(comp1);
         Comparator<Course> comp2 = (Course c1, Course c2) -> (c1.compareTo(c2));
         kdamCourses =new TreeSet<>(comp2);
-        numOfCurrStudents=new AtomicInteger(0);
+        numOfCurrStudents=0;
     }
 
     public int getSerialNum(){
@@ -35,10 +35,13 @@ public class Course {
     }
 
     public boolean isAvailable(){//todo need sync?
-        return (numOfMaxStudents-numOfCurrStudents.get())>0;
+        return (numOfMaxStudents-numOfCurrStudents)>0;
+    }
+    private int numOfSeatsAvailable(){
+        return numOfMaxStudents-numOfCurrStudents;
     }
 
-    public AtomicInteger getNumOfCurrStudents() {
+    public int getNumOfCurrStudents() {
         return numOfCurrStudents;
     }
 
@@ -46,7 +49,7 @@ public class Course {
         return numOfMaxStudents;
     }
 
-    public void setNumOfCurrStudents(AtomicInteger numOfCurrStudents) {//todo needed?
+    public void setNumOfCurrStudents(int numOfCurrStudents) {//todo needed?
         this.numOfCurrStudents = numOfCurrStudents;
     }
 
@@ -67,9 +70,9 @@ public class Course {
         this.kdamCourses = KdamCourses;
     }
 
-    public String getCourseStat(){
+    public synchronized String getCourseStat(){
         String courseStat="Course:("+courseNum+")"+courseName+"\n"+
-                "Seats Available:"+getNumOfCurrStudents()+"/"+getNumOfMaxStudents()+"\n"+
+                "Seats Available:"+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+
                 "Students Registered:"+getRegisteredStudentsToString();
         return courseStat;
     }
@@ -108,5 +111,13 @@ public class Course {
         }
         output = output.concat("]");
         return output;
+    }
+
+    public void incrementNumOfCurrStudents() {
+        numOfCurrStudents++;
+    }
+
+    public void decrementNumOfCurrStudents() {
+        numOfCurrStudents--;
     }
 }

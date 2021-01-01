@@ -8,7 +8,7 @@ import bgu.spl.net.impl.RegistrationSystem.User;
 
 public class MyCoursesMessage implements Message {
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//todo check sync probably not
         User user= session.getUser();
         if (user!=null){
             if (user instanceof Student) {
@@ -16,6 +16,6 @@ public class MyCoursesMessage implements Message {
                 return new AckMessage<>((short) 11,myCourses);
             }
         }
-        return new ErrorMessage((short)11);//todo needs to send error?    YES HUN i think so;)
+        return new ErrorMessage((short)11);
     }
 }

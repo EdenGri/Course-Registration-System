@@ -10,7 +10,7 @@ public class CourseStatMessage implements Message {
     }
 
     @Override
-    public Message execute(Database database, Session session) {//todo add snync?
+    public Message execute(Database database, Session session) {
         User user= session.getUser();
         if (user instanceof Admin) {
             String courseStat = database.getCourseStat(courseNum);
