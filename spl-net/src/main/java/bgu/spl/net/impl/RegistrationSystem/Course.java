@@ -10,7 +10,7 @@ public class Course {
     private int serialNum;
     private String courseName;
     private Short courseNum;
-    private ArrayList<String> kdamCoursesList;
+    private SortedSet<Course> kdamCourses;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
     private AtomicInteger numOfCurrStudents;//todo check
@@ -21,7 +21,8 @@ public class Course {
         this.courseNum = courseNum;
         Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
         registeredStudents=new TreeSet<>(comp1);
-        kdamCoursesList =new ArrayList<>();
+        Comparator<Course> comp2 = (Course c1, Course c2) -> (c1.compareTo(c2));
+        kdamCourses =new TreeSet<>(comp2);
         numOfCurrStudents=new AtomicInteger(0);
     }
 
@@ -53,8 +54,8 @@ public class Course {
         this.numOfMaxStudents = numOfMaxStudents;
     }
 
-    public ArrayList<String> getKdamCoursesList(){
-        return kdamCoursesList;
+    public SortedSet<Course> getKdamCourses(){
+        return kdamCourses;
     }
 
     public SortedSet<Student> getRegisteredStudents(){
@@ -62,8 +63,8 @@ public class Course {
     }
 
 
-    public void setKdamCoursesList(ArrayList<String> NumOfKdamCourses) {
-        this.kdamCoursesList = NumOfKdamCourses;
+    public void setKdamCoursesList(SortedSet KdamCourses) {
+        this.kdamCourses = KdamCourses;
     }
 
     public String getCourseStat(){
@@ -94,5 +95,18 @@ public class Course {
 
     public int getCourseNum() {
         return courseNum;
+    }
+
+    public String KdamCoursesToString() {
+        String output = "[";
+        for (Course kdam:kdamCourses){
+            output =output.concat(kdam.courseNum.toString());
+            output =output.concat(",");
+        }
+        if (output.length()>1) {//if the is extra ","
+            output = output.substring(0, output.length() - 1);//remove the last ","
+        }
+        output = output.concat("]");
+        return output;
     }
 }

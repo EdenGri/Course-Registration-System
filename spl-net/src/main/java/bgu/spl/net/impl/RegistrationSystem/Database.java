@@ -73,7 +73,7 @@ public class Database {
         return output;
     }
 
-    public boolean CourseUnregistered(User user, int courseNum) {//todo add sync
+    public boolean CourseUnregistered(User user, Short courseNum) {//todo add sync
         boolean output = false;
         if (user instanceof Student) {
             Course course = courses.get(courseNum);
@@ -114,25 +114,30 @@ public class Database {
         try {
             listOfCourses = (ArrayList<String>)Files.readAllLines(Paths.get(coursesFilePath));
             int line = 1;
-            for (String course : listOfCourses) {
-                String[] splitString = course.split("\\|");
+            for (String courseLine : listOfCourses) {
+                String[] splitString = courseLine.split("\\|");
                 Short courseNum = Short.parseShort(splitString[0]);
                 String courseName = splitString[1];
-                Course addCourse = new Course(line, courseName, courseNum);
+                Course course = new Course(line, courseName, courseNum);
                 line++;
-                courses.putIfAbsent(courseNum, addCourse);//todo chang to put?
-
-                String kdamCourses = splitString[2];
-                //we check if the kdamCourses not empty list of "[]"
-                if(kdamCourses.length() > 2) {
-                    String kdamSubst = kdamCourses.substring(1, kdamCourses.length() - 1);//TODO CHANGE THE LIST TO COURSES
-                    String[] str = kdamSubst.split(",");
-                    List<String> kdamList = new ArrayList<>(Arrays.asList(str));
-                    addCourse.setKdamCoursesList((ArrayList)kdamList);
-                }
-
+                courses.putIfAbsent(courseNum, course);//todo chang to put?
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
-                addCourse.setNumOfMaxStudents(numOfMaxStudents);
+                course.setNumOfMaxStudents(numOfMaxStudents);
+            }
+            for (String courseLine : listOfCourses){
+                String[] splitString = courseLine.split("\\|");
+                Short courseNum = Short.parseShort(splitString[0]);
+                Course course = courses.get(courseNum);
+                String KdamCoursesList = splitString[2];
+                //we check if the kdamCourses not empty list of "[]"
+                if(KdamCoursesList.length() > 2) {
+                    String kdamSubst = KdamCoursesList.substring(1, KdamCoursesList.length() - 1);//TODO CHANGE THE LIST TO COURSES
+                    String[] KdamArray = kdamSubst.split(",");
+                    for (String numOfKdam:KdamArray){
+                        Course addCourse = courses.get(Short.valueOf(numOfKdam));
+                        course.getKdamCourses().add(addCourse);
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

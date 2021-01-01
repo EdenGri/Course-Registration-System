@@ -16,8 +16,8 @@ public class KdamCheckMessage implements Message {
         if (user instanceof Student) {
             Course course = database.getCourses().get(courseNum);
             if (course != null) {
-                String optional = course.getKdamCoursesList().toString();
-                return new AckMessage((short) 6, optional);//todo check the tostring
+                String kdamCourses = course.KdamCoursesToString();
+                return new AckMessage((short) 6, kdamCourses);//todo check the tostring
             }
         }
         return new ErrorMessage((short)6);

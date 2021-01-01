@@ -6,8 +6,8 @@ import bgu.spl.net.impl.RegistrationSystem.Session;
 import bgu.spl.net.impl.RegistrationSystem.User;
 
 public class UnregisterMessage implements Message {
-    int courseNum;
-    public UnregisterMessage(int courseNum){
+    Short courseNum;
+    public UnregisterMessage(Short courseNum){
         super();
         this.courseNum=courseNum;
     }

@@ -4,8 +4,8 @@ import bgu.spl.net.api.Message;
 import bgu.spl.net.impl.RegistrationSystem.*;
 
 public class IsRegisteredMessage implements Message {
-    int courseNum;
-    public IsRegisteredMessage(int courseNum){
+    Short courseNum;
+    public IsRegisteredMessage(Short courseNum){
         super();
         this.courseNum=courseNum;
     }
