@@ -4,8 +4,8 @@ import bgu.spl.net.api.Message;
 import bgu.spl.net.impl.RegistrationSystem.*;
 
 public class CourseStatMessage implements Message {
-    private int courseNum;
-    public CourseStatMessage(int courseNum){
+    private Short courseNum;
+    public CourseStatMessage(Short courseNum){
         this.courseNum=courseNum;
     }
 

@@ -102,8 +102,8 @@ public class Database {
         return output;
     }
 
-    public String getCourseStat(int courseNum) {
-        Course course = getCourses().get(courseNum);
+    public String getCourseStat(Short courseNum) {
+        Course course = courses.get(courseNum);
         if (course!=null) {
             return course.getCourseStat();
         }

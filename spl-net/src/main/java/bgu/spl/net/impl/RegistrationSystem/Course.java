@@ -84,7 +84,9 @@ public class Course {
         for (Student student:registeredStudents){ //todo shouldnt we check its not empty?
             output = output.concat(student.getName()+",");
         }
-       output = output.substring(0,output.length()-1);//remove the last ","
+        if (output.length()>1) {//if the is extra ","
+            output = output.substring(0, output.length() - 1);//remove the last ","
+        }
        output = output.concat("]");
         return output;
     }
@@ -97,7 +99,7 @@ public class Course {
         return serialNum-c2.getSerialNum();
     }
 
-    public int getCourseNum() {
+    public Short getCourseNum() {
         return courseNum;
     }
 
