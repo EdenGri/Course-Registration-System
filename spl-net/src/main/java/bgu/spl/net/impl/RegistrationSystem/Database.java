@@ -54,17 +54,21 @@ public class Database {
     public boolean CourseReg(User user, Short courseNum) {
         boolean output=false;
         if (user instanceof Student) {
-            Course course = courses.get(courseNum);
-            if (course != null) {
-                //todo dont sure about snyc think theres no need
-                if (((Student) user).haveAllKdamCourses(this,course)) {
-                    synchronized (course) {
-                        if (course.isAvailable()) {
-                            output = course.getRegisteredStudents().add((Student) user);
-                            if (output) {
-                                course.incrementNumOfCurrStudents();
-                                synchronized (user) {
-                                    ((Student) user).getRegisteredCourses().add(course);
+            if (user.getIsLoggedIn()) {
+                Course course = courses.get(courseNum);
+                if (course != null) {
+                    //todo dont sure about snyc think theres no need
+                    if (((Student) user).haveAllKdamCourses(this, course)) {
+                        //add the sync in case of parallelism between courseStat and courseReg
+                        synchronized (course) {
+                            if (course.isAvailable()) {
+                                output = course.getRegisteredStudents().add((Student) user);
+                                if (output) {
+                                    course.incrementNumOfCurrStudents();
+                                    //add the sync in case of parallelism between studentStat and courseReg
+                                    synchronized (user) {
+                                        ((Student) user).getRegisteredCourses().add(course);
+                                    }
                                 }
                             }
                         }
@@ -78,15 +82,19 @@ public class Database {
     public boolean CourseUnregistered(User user, Short courseNum) {//todo add sync
         boolean output = false;
         if (user instanceof Student) {
-            Course course = courses.get(courseNum);
-            if (course != null) {
-                synchronized (course) {
-                    output = course.getRegisteredStudents().remove((Student) user);
-                    synchronized (user) {
-                        ((Student) user).getRegisteredCourses().remove(course);
-                    }
-                    if (output) {
-                        course.decrementNumOfCurrStudents();
+            if (user.getIsLoggedIn()) {
+                Course course = courses.get(courseNum);
+                if (course != null) {
+                    //add the sync in case of parallelism between courseStat and courseUnreg
+                    synchronized (course) {
+                        output = course.getRegisteredStudents().remove((Student) user);
+                        //add the sync in case of parallelism between studentStat and courseUnreg
+                        synchronized (user) {
+                            ((Student) user).getRegisteredCourses().remove(course);
+                        }
+                        if (output) {
+                            course.decrementNumOfCurrStudents();
+                        }
                     }
                 }
             }
@@ -107,7 +115,7 @@ public class Database {
         if (user instanceof Student) {
             return ((Student) user).getStudentStat();
         }
-        return null;//todo check
+        return null;
     }
 
 

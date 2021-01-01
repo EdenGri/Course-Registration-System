@@ -12,8 +12,10 @@ public class MyCoursesMessage implements Message {
         User user= session.getUser();
         if (user!=null){
             if (user instanceof Student) {
-                String myCourses=((Student)user).getRegisteredCoursesToString();
-                return new AckMessage<>((short) 11,myCourses);
+                if (user.getIsLoggedIn()) {
+                    String myCourses = ((Student) user).getRegisteredCoursesToString();
+                    return new AckMessage<>((short) 11, myCourses);
+                }
             }
         }
         return new ErrorMessage((short)11);

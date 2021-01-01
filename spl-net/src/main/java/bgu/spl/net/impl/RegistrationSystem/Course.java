@@ -70,6 +70,7 @@ public class Course {
         this.kdamCourses = KdamCourses;
     }
 
+    //add the sync in case of parallelism between courseStat and courseReg/courseUnreg
     public synchronized String getCourseStat(){
         String courseStat="Course:("+courseNum+")"+courseName+"\n"+
                 "Seats Available:"+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+

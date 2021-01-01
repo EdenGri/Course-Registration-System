@@ -11,7 +11,7 @@ public class Student extends User {
         registeredCourses=new TreeSet<>(comp);
     }
 
-    public SortedSet<Course> getRegisteredCourses() {//TODO CHECK SYNC
+    public SortedSet<Course> getRegisteredCourses() {
         return registeredCourses;
     }
 
@@ -25,6 +25,7 @@ public class Student extends User {
         return true;
     }
 
+    //add the sync in case of parallelism between studentStat and courseReg/courseUnreg
     public synchronized String getStudentStat(){
         return "Student:"+username+"\n"+
                 "Courses:"+getRegisteredCoursesToString();
@@ -32,10 +33,12 @@ public class Student extends User {
 
     public String getRegisteredCoursesToString() {
         String output="[";
-        for (Course course: registeredCourses){ //todo shouldnt we check its not empty?
+        for (Course course: registeredCourses){
             output = output.concat(course.getCourseNum()+",");
         }
-        output = output.substring(0,output.length()-1);//remove the last ","
+        if (output.length()>1) {//if the is extra ","
+            output = output.substring(0, output.length() - 1);//remove the last ","
+        }
         output = output.concat("]");
         return output;
     }

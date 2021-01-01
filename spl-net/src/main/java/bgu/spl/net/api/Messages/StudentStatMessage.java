@@ -16,8 +16,12 @@ public class StudentStatMessage implements Message {
     public Message execute(Database database, Session session) {//todo check sync probably not
         User user=session.getUser();
         if (user instanceof Admin) {
-            String studentStat = database.getStudentStat(StudentUserName);
-            return new AckMessage<>((short)8, studentStat);
+            if (user.getIsLoggedIn()) {
+                String studentStat = database.getStudentStat(StudentUserName);
+                if (studentStat!=null) {
+                    return new AckMessage<>((short) 8, studentStat);
+                }
+            }
         }
         return new ErrorMessage((short)8);
     }

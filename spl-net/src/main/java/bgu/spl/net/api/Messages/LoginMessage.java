@@ -33,8 +33,10 @@ public class LoginMessage implements Message {
         if (user!=null){
             if (user.getPassword().equals(password)){
                 if (session.getUser()==null){
-                    session.setUser(user);
-                    return new AckMessage((short)3,null);
+                    if (user.login()) {
+                        session.setUser(user);
+                        return new AckMessage((short) 3, null);
+                    }
                 }
             }
         }

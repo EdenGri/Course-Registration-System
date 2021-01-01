@@ -14,13 +14,14 @@ public class IsRegisteredMessage implements Message {
     public Message execute(Database database, Session session) {//todo check sync probably no need
         User user = session.getUser();
         if (user instanceof Student){
-            Course course=database.getCourses().get(courseNum);
-            if (course!=null) {
-                if (course.isRegistered(user)) {
-                    return new AckMessage<>((short) 9, "REGISTERED");
-                }
-                else {
-                    return new AckMessage<>((short) 9, "NOT REGISTERED");
+            if (user.getIsLoggedIn()) {
+                Course course = database.getCourses().get(courseNum);
+                if (course != null) {
+                    if (course.isRegistered(user)) {
+                        return new AckMessage<>((short) 9, "REGISTERED");
+                    } else {
+                        return new AckMessage<>((short) 9, "NOT REGISTERED");
+                    }
                 }
             }
         }

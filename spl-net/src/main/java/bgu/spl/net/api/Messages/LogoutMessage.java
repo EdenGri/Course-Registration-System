@@ -15,9 +15,11 @@ public class LogoutMessage implements Message {
     public Message execute(Database database, Session session) {//todo check sync
         User user = session.getUser();
         if (user != null) {
-            session.setUser(null);
-            session.setShouldLogout(true);
-            return new AckMessage((short) 4, null);
+            if (user.logout()) {
+                session.setUser(null);
+                session.setShouldLogout(true);
+                return new AckMessage((short) 4, null);
+            }
         }
         return new ErrorMessage((short) 4);
     }
