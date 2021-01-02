@@ -27,8 +27,8 @@ public class Student extends User {
 
     //add the sync in case of parallelism between studentStat and courseReg/courseUnreg
     public synchronized String getStudentStat(){
-        return "Student:"+username+"\n"+
-                "Courses:"+getRegisteredCoursesToString();
+        return "Student: "+username+"\n"+
+                "Courses: "+getRegisteredCoursesToString();
     }
 
     public String getRegisteredCoursesToString() {

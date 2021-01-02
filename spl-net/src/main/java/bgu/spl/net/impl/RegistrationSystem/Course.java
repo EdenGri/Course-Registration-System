@@ -72,13 +72,12 @@ public class Course {
 
     //add the sync in case of parallelism between courseStat and courseReg/courseUnreg
     public synchronized String getCourseStat(){
-        String courseStat="Course:("+courseNum+")"+courseName+"\n"+
-                "Seats Available:"+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+
-                "Students Registered:"+getRegisteredStudentsToString();
+        String courseStat="Course: ("+courseNum+") "+courseName+"\n"+
+                "Seats Available: "+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+
+                "Students Registered: "+getRegisteredStudentsToString();
         return courseStat;
     }
 
-    //TODO check output = something
     private String getRegisteredStudentsToString() {
         String output = "[";
         for (Student student:registeredStudents){ //todo shouldnt we check its not empty?

@@ -9,15 +9,13 @@ import bgu.spl.net.impl.RegistrationSystem.User;
 public class MyCoursesMessage implements Message {
     @Override
     public Message execute(Database database, Session session) {//todo check sync probably not
-        User user= session.getUser();
-        if (user!=null){
-            if (user instanceof Student) {
-                if (user.getIsLoggedIn()) {
-                    String myCourses = ((Student) user).getRegisteredCoursesToString();
-                    return new AckMessage<>((short) 11, myCourses);
-                }
-            }
+        User user = session.getUser();
+        if (user instanceof Student && user.getIsLoggedIn()) {
+
+            String myCourses = ((Student) user).getRegisteredCoursesToString();
+            return new AckMessage<>((short) 11, myCourses);
+
         }
-        return new ErrorMessage((short)11);
+        return new ErrorMessage((short) 11);
     }
 }
