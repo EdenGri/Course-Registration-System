@@ -7,9 +7,10 @@ import bgu.spl.net.impl.RegistrationSystem.User;
 
 public class UnregisterMessage implements Message {
     Short courseNum;
-    public UnregisterMessage(Short courseNum){
+
+    public UnregisterMessage(Short courseNum) {
         super();
-        this.courseNum=courseNum;
+        this.courseNum = courseNum;
     }
 
     @Override

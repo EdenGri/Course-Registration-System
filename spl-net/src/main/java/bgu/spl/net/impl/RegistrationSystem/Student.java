@@ -5,10 +5,10 @@ import java.util.*;
 public class Student extends User {
     private SortedSet<Course> registeredCourses;
 
-    public Student(String username,String password) {
+    public Student(String username, String password) {
         super(username, password);
         Comparator<Course> comp = (Course c1, Course c2) -> (c1.compareTo(c2));
-        registeredCourses=new TreeSet<>(comp);
+        registeredCourses = new TreeSet<>(comp);
     }
 
     //Returns the courses the student is registered to
@@ -17,10 +17,10 @@ public class Student extends User {
     }
 
     //Returns true if the student has all the kdam courses that are required for the specific course
-    public boolean haveAllKdamCourses(Course course){
+    public boolean haveAllKdamCourses(Course course) {
         SortedSet<Course> KdamCourses = course.getKdamCourses();
-        for (Course kdam:KdamCourses){
-            if (!registeredCourses.contains(kdam)){
+        for (Course kdam : KdamCourses) {
+            if (!registeredCourses.contains(kdam)) {
                 return false;
             }
         }
@@ -29,17 +29,17 @@ public class Student extends User {
 
     //Returns the student's status
     //added the sync in case of parallelism between studentStat and courseReg/courseUnreg
-    public synchronized String getStudentStat(){
-        return "Student: "+username+"\n"+
-                "Courses: "+getRegisteredCoursesToString();
+    public synchronized String getStudentStat() {
+        return "Student: " + username + "\n" +
+                "Courses: " + getRegisteredCoursesToString();
     }
 
     public String getRegisteredCoursesToString() {
-        String output="[";
-        for (Course course: registeredCourses){
-            output = output.concat(course.getCourseNum()+",");
+        String output = "[";
+        for (Course course : registeredCourses) {
+            output = output.concat(course.getCourseNum() + ",");
         }
-        if (output.length()>1) {//if there is an extra ","
+        if (output.length() > 1) {//if there is an extra ","
             output = output.substring(0, output.length() - 1);//remove the last ","
         }
         output = output.concat("]");

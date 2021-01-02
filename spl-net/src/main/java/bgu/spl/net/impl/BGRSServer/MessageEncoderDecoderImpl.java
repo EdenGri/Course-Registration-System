@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message> {
-    private  short opcode=-1;
+    private short opcode = -1;
     private final ByteBuffer opcodeBuffer = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
     private byte[] bytes = new byte[1 << 10]; //start with 1k
@@ -20,11 +20,11 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     @Override
     public Message decodeNextByte(byte nextByte) {
 
-        if (opcode==-1) {//we read the opcode
+        if (opcode == -1) {//we read the opcode
             opcodeBuffer.put(nextByte);
             if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes
                 opcodeBuffer.flip();
-                opcode=opcodeBuffer.getShort();
+                opcode = opcodeBuffer.getShort();
 
                 //we are reading Logout Message
                 if (opcode == 4) {
@@ -32,7 +32,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
                     return new LogoutMessage();
                 }
                 //we are reading MyCourses Message
-                else if (opcode== 11) {
+                else if (opcode == 11) {
                     clearAll();
                     return new MyCoursesMessage();
                 }
@@ -61,12 +61,12 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
 
         //we are reading KdamCheck Message
-        else if (opcode== 6) {
+        else if (opcode == 6) {
             return decodeNextByteKdamCheck(nextByte);
         }
 
         //we are reading CourseStat Message
-        else if (opcode== 7) {
+        else if (opcode == 7) {
             return decodeNextByteCourseStat(nextByte);
         }
 
@@ -76,12 +76,12 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
 
         //we are reading IsRegistered Message
-        else if (opcode== 9) {
+        else if (opcode == 9) {
             return decodeNextByteIsRegistered(nextByte);
         }
 
         //we are reading Unregister Message
-        else if (opcode== 10) {
+        else if (opcode == 10) {
             return decodeNextByteUnregister(nextByte);
         }
 
@@ -230,34 +230,35 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
-/*
-    public Message decodeNextByteAckMessage(byte nextByte) {
-        if (messageOpcode.hasRemaining()) {
-            messageOpcode.put(nextByte);
-            if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-                messageOpcode.flip();
-                AckMessage output = new AckMessage(messageOpcode.getShort());
-                clearAll();
-                return output;
-            }
-        }
-        return null;
-    }
 
-    public Message decodeNextByteErrorMessage(byte nextByte) {
-        if (messageOpcode.hasRemaining()) {
-            messageOpcode.put(nextByte);
-            if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-                messageOpcode.flip();
-                ErrorMessage output = new ErrorMessage(messageOpcode.getShort());
-                clearAll();
-                return output;
+    /*
+        public Message decodeNextByteAckMessage(byte nextByte) {
+            if (messageOpcode.hasRemaining()) {
+                messageOpcode.put(nextByte);
+                if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
+                    messageOpcode.flip();
+                    AckMessage output = new AckMessage(messageOpcode.getShort());
+                    clearAll();
+                    return output;
+                }
             }
+            return null;
         }
-        return null;
-    }
 
- */
+        public Message decodeNextByteErrorMessage(byte nextByte) {
+            if (messageOpcode.hasRemaining()) {
+                messageOpcode.put(nextByte);
+                if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
+                    messageOpcode.flip();
+                    ErrorMessage output = new ErrorMessage(messageOpcode.getShort());
+                    clearAll();
+                    return output;
+                }
+            }
+            return null;
+        }
+
+     */
     //adds next byte to bytes
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
@@ -278,7 +279,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     private void clearAll() {
         len = 0;
         zeroCounter = 0;
-        opcode=-1;
+        opcode = -1;
         opcodeBuffer.clear();
         courseNum.clear();
     }
@@ -352,16 +353,15 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             if (responseBytes != null) {
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
                 //adds last "0"
-                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);
-            }
-            else {
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length + responseBytes.length, 1);
+            } else {
                 //adds last "0"
                 System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);
             }
             return output;
         }
         //we encode errorMessage
-        else{
+        else {
             byte[] output = new byte[outputSize];
             //adds opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
@@ -370,6 +370,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             return output;
         }
     }
+
     //encodes opcode for specific message
     private byte[] createOpcode(Message message) {
         if (message instanceof AckMessage) {
@@ -379,6 +380,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
+
     //encodes other message opcode
     private byte[] createMessageOpcode(Message message) {
         Short MessageOpcode = ((ServerToClientMessage) message).getMessageOpcode();

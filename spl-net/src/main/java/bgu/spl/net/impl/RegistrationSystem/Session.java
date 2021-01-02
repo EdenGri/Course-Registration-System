@@ -2,27 +2,29 @@ package bgu.spl.net.impl.RegistrationSystem;
 
 public class Session {
     User user;
-    boolean shouldLogout=false;
+    boolean shouldLogout = false;
 
-    public Session(User user){
-        this.user=user;
+    public Session(User user) {
+        this.user = user;
     }
 
     //Returns user
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
-    //Set user
-    public void setUser(User user){
-        this.user=user;
+    //Sets user
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public boolean getShouldLogout(){
+    //should logout getter
+    public boolean getShouldLogout() {
         return shouldLogout;
     }
 
+    //should logout setter
     public void setShouldLogout(boolean b) {
-        shouldLogout=b;
+        shouldLogout = b;
     }
 }

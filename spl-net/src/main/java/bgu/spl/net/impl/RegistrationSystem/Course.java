@@ -13,19 +13,19 @@ public class Course {
     private int numOfMaxStudents;
     private int numOfCurrStudents;
 
-    public Course (int serialNum,String courseName, Short courseNum){
+    public Course(int serialNum, String courseName, Short courseNum) {
         this.serialNum = serialNum;
         this.courseName = courseName;
         this.courseNum = courseNum;
         Comparator<Student> comp1 = (Student s1, Student s2) -> (s1.compareTo(s2));
-        registeredStudents=new TreeSet<>(comp1);
+        registeredStudents = new TreeSet<>(comp1);
         Comparator<Course> comp2 = (Course c1, Course c2) -> (c1.compareTo(c2));
-        kdamCourses =new TreeSet<>(comp2);
-        numOfCurrStudents=0;
+        kdamCourses = new TreeSet<>(comp2);
+        numOfCurrStudents = 0;
     }
 
     //Returns serial number of the course
-    public int getSerialNum(){
+    public int getSerialNum() {
         return serialNum;
     }
 
@@ -40,13 +40,13 @@ public class Course {
     }
 
     //Returns true if there is an empty seat in the course
-    public boolean isAvailable(){
-        return (numOfMaxStudents-numOfCurrStudents)>0;
+    public boolean isAvailable() {
+        return (numOfMaxStudents - numOfCurrStudents) > 0;
     }
 
     //Returns the number of empty seats in the course
-    private int numOfSeatsAvailable(){
-        return numOfMaxStudents-numOfCurrStudents;
+    private int numOfSeatsAvailable() {
+        return numOfMaxStudents - numOfCurrStudents;
     }
 
     //Sets the number of max seats in the course
@@ -55,53 +55,53 @@ public class Course {
     }
 
     //Returns the kdam courses
-    public SortedSet<Course> getKdamCourses(){
+    public SortedSet<Course> getKdamCourses() {
         return kdamCourses;
     }
 
     //Returns the students that are registered to the course
-    public SortedSet<Student> getRegisteredStudents(){
+    public SortedSet<Student> getRegisteredStudents() {
         return registeredStudents;
     }
 
     //Returns the course state
     //added the sync in case of parallelism between courseStat and courseReg/courseUnreg
-    public synchronized String getCourseStat(){
-        String courseStat="Course: ("+courseNum+") "+courseName+"\n"+
-                "Seats Available: "+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+
-                "Students Registered: "+getRegisteredStudentsToString();
+    public synchronized String getCourseStat() {
+        String courseStat = "Course: (" + courseNum + ") " + courseName + "\n" +
+                "Seats Available: " + numOfSeatsAvailable() + "/" + numOfMaxStudents + "\n" +
+                "Students Registered: " + getRegisteredStudentsToString();
         return courseStat;
     }
 
     private String getRegisteredStudentsToString() {
         String output = "[";
-        for (Student student:registeredStudents){
-            output = output.concat(student.getName()+",");
+        for (Student student : registeredStudents) {
+            output = output.concat(student.getName() + ",");
         }
-        if (output.length()>1) {//if the is extra ","
+        if (output.length() > 1) {//if the is extra ","
             output = output.substring(0, output.length() - 1);//remove the last ","
         }
-       output = output.concat("]");
+        output = output.concat("]");
         return output;
     }
 
     //Returns true if the user iz registered to the course
-    public boolean isRegistered(User user){
+    public boolean isRegistered(User user) {
         return registeredStudents.contains(user);
     }
 
     //compares two courses by their serial number
     public int compareTo(Course c2) {
-        return serialNum-c2.getSerialNum();
+        return serialNum - c2.getSerialNum();
     }
 
     public String KdamCoursesToString() {
         String output = "[";
-        for (Course kdam:kdamCourses){
-            output =output.concat(kdam.courseNum.toString());
-            output =output.concat(",");
+        for (Course kdam : kdamCourses) {
+            output = output.concat(kdam.courseNum.toString());
+            output = output.concat(",");
         }
-        if (output.length()>1) {//if the is extra ","
+        if (output.length() > 1) {//if the is extra ","
             output = output.substring(0, output.length() - 1);//remove the last ","
         }
         output = output.concat("]");

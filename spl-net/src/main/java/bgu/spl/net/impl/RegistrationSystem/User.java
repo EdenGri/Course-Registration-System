@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class User {
     protected String username;
     protected String password;
-    protected AtomicBoolean isLoggedIn=new AtomicBoolean(false);
+    protected AtomicBoolean isLoggedIn = new AtomicBoolean(false);
 
     public User(String username, String password) {
         this.username = username;
@@ -14,7 +14,7 @@ public abstract class User {
     }
 
     //Returns the name of the user
-    public String getName(){
+    public String getName() {
         return username;
     }
 
@@ -24,16 +24,17 @@ public abstract class User {
     }
 
     //Returns true if the user is logged in
-    public boolean getIsLoggedIn(){
+    public boolean getIsLoggedIn() {
         return isLoggedIn.get();
     }
 
     //Returns true if login is done successfully
-    public boolean login(){
-        return isLoggedIn.compareAndSet(false,true);
+    public boolean login() {
+        return isLoggedIn.compareAndSet(false, true);
     }
+
     //Returns true if login is done successfully
-    public boolean logout(){
-        return isLoggedIn.compareAndSet(true,false);
+    public boolean logout() {
+        return isLoggedIn.compareAndSet(true, false);
     }
 }

@@ -7,11 +7,11 @@ import bgu.spl.net.impl.RegistrationSystem.Session;
 public class ServerToClientMessage implements Message {
     protected short MessageOpcode;
 
-    public ServerToClientMessage(short MessageOpcode){
+    public ServerToClientMessage(short MessageOpcode) {
         this.MessageOpcode = MessageOpcode;
     }
 
-    public short getMessageOpcode(){
+    public short getMessageOpcode() {
         return MessageOpcode;
     }
 
