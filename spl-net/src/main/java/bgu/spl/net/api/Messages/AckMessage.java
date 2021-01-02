@@ -11,7 +11,7 @@ public class AckMessage<String> extends ServerToClientMessage {
         this.response = response;
     }
 
-    public String getResponse(){
+    public String getResponse() {
         return response;
     }
 
