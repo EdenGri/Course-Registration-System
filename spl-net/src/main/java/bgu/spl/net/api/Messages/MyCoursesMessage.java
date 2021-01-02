@@ -8,6 +8,7 @@ import bgu.spl.net.impl.RegistrationSystem.User;
 
 public class MyCoursesMessage implements Message {
     @Override
+    //Returns the courses the student has registered to
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user instanceof Student && user.getIsLoggedIn()) {

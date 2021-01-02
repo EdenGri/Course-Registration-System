@@ -13,6 +13,7 @@ public class StudentStatMessage implements Message {
 
 
     @Override
+    //admin want to receive a status about a specific student.
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user instanceof Admin && user.getIsLoggedIn()) {

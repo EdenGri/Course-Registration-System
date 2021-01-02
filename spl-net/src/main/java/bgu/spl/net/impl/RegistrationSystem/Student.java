@@ -11,10 +11,12 @@ public class Student extends User {
         registeredCourses=new TreeSet<>(comp);
     }
 
+    //Returns the courses the student is registered to
     public SortedSet<Course> getRegisteredCourses() {
         return registeredCourses;
     }
 
+    //Returns true if the student have all the kdam courses that require for the spastic course
     public boolean haveAllKdamCourses(Course course){
         SortedSet<Course> KdamCourses = course.getKdamCourses();
         for (Course kdam:KdamCourses){
@@ -25,6 +27,7 @@ public class Student extends User {
         return true;
     }
 
+    //Returns the student status
     //add the sync in case of parallelism between studentStat and courseReg/courseUnreg
     public synchronized String getStudentStat(){
         return "Student: "+username+"\n"+
@@ -43,10 +46,12 @@ public class Student extends User {
         return output;
     }
 
+    //compare students by the alphabetically order
     public int compareTo(Student s2) {
         return this.username.compareTo(s2.getName());
     }
 
+    //add the course to the registered courses
     public void add(Course course) {
         registeredCourses.add(course);
     }

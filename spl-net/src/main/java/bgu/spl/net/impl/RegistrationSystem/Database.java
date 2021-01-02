@@ -39,19 +39,23 @@ public class Database {
         private static Database instance = new Database();
     }
 
+    //Returns the registered users
     public ConcurrentHashMap<String, User> getRegisteredUsers() {
         return registeredUsers;
     }
 
+    //Returns the courses
     public ConcurrentHashMap<Short, Course> getCourses() {
         return courses;
     }
 
+    //register user to the service
     public User UserReg(String userName, User user) {
         //indicates if the user don't registered yet
         return registeredUsers.putIfAbsent(userName, user);
     }
 
+    //register user to the course with the specific number
     public boolean CourseReg(User user, Short courseNum) {
         boolean output = false;
         if (user instanceof Student && user.getIsLoggedIn()) {
@@ -78,10 +82,12 @@ public class Database {
         return output;
     }
 
+    //unregister user to the course with the specific number
     public boolean CourseUnregistered(User user, Short courseNum) {
         boolean output = false;
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = courses.get(courseNum);
+            //checks the course is exists
             if (course != null) {
                 //add the sync in case of parallelism between courseStat and courseUnreg
                 synchronized (course) {
@@ -100,6 +106,7 @@ public class Database {
         return output;
     }
 
+    //Returns the course status to the course with the specific number
     public String getCourseStat(Short courseNum) {
         Course course = courses.get(courseNum);
         //check if the course is exits
@@ -109,6 +116,7 @@ public class Database {
         return null;
     }
 
+    //Returns the student status to the student with the specific name
     public String getStudentStat(String StudentUserName) {
         User user = getRegisteredUsers().get(StudentUserName);
         if (user instanceof Student) {

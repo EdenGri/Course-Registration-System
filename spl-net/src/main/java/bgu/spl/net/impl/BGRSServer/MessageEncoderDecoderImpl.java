@@ -19,9 +19,10 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
     @Override
     public Message decodeNextByte(byte nextByte) {
-        if (opcode==-1) {
+
+        if (opcode==-1) {//we read the opcode
             opcodeBuffer.put(nextByte);
-            if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes
                 opcodeBuffer.flip();
                 opcode=opcodeBuffer.getShort();
 
@@ -156,7 +157,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteCourseReg(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 CourseRegMessage output = new CourseRegMessage(courseNum.getShort());
                 clearAll();
@@ -169,7 +170,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteKdamCheck(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 KdamCheckMessage output = new KdamCheckMessage(courseNum.getShort());
                 clearAll();
@@ -182,7 +183,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteCourseStat(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 CourseStatMessage output = new CourseStatMessage(courseNum.getShort());
                 clearAll();
@@ -207,7 +208,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteIsRegistered(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 IsRegisteredMessage output = new IsRegisteredMessage(courseNum.getShort());
                 clearAll();
@@ -257,14 +258,13 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     }
 
  */
-
+    //add next byte to bytes
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
             bytes = Arrays.copyOf(bytes, len * 2);
         }
         bytes[len++] = nextByte;
     }
-
 
     private String popString() {
         //notice that we explicitly requesting that the string will be decoded from UTF-8
@@ -274,6 +274,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         return result;
     }
 
+    //returns the fields to their default state
     private void clearAll() {
         len = 0;
         zeroCounter = 0;
@@ -331,7 +332,9 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
         byte[] opcode = createOpcode(message);
         byte[] MessageOpcode = createMessageOpcode(message);
+        //the size of the opcode and the size of the other message opcode
         int outputSize = 4;
+        //we encode AckMessage
         if (message instanceof AckMessage) {
             String response = ((AckMessage<String>) message).getResponse();
             byte[] responseBytes = null;
@@ -341,28 +344,33 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             }
             outputSize++;//for the last "0"  byte
             byte[] output = new byte[outputSize];
+            //add opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
+            //add other message opcode to output
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             //add the optional part at AckMessage
             if (responseBytes != null) {
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
+                //add last "0"
                 System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);
             }
             else {
+                //add last "0"
                 System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);
             }
             return output;
         }
-        //the message is instance of errorMessage
+        //we encode errorMessage
         else{
-            outputSize = opcode.length + MessageOpcode.length;
             byte[] output = new byte[outputSize];
+            //add opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
+            //add other message opcode to output
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             return output;
         }
     }
-
+    //encode opcode for specific message
     private byte[] createOpcode(Message message) {
         if (message instanceof AckMessage) {
             return shortToBytes((short) 12);
@@ -371,7 +379,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
-
+    //encode other message opcode
     private byte[] createMessageOpcode(Message message) {
         Short MessageOpcode = ((ServerToClientMessage) message).getMessageOpcode();
         return shortToBytes(MessageOpcode);
