@@ -29,12 +29,14 @@ public class AdminRegMessage implements Message {
 
     @Override
     public Message execute(Database database, Session session) {
-        User user = new Admin(username, password);
-        User toAdd = database.UserReg(username, user);
-        if (toAdd == null) {
-            return new AckMessage((short)1,null);
-        } else {
-            return new ErrorMessage((short)1);
+        User user = session.getUser();
+        if (user == null) { //todo check
+            User admin = new Admin(username, password);
+            User toAdd = database.UserReg(username, admin);
+            if (toAdd == null) {
+                return new AckMessage((short) 1, null);
+            }
         }
+        return new ErrorMessage((short) 1);
     }
 }
