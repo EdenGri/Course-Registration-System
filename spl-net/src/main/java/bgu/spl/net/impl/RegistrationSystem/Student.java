@@ -3,7 +3,7 @@ package bgu.spl.net.impl.RegistrationSystem;
 import java.util.*;
 
 public class Student extends User {
-    private SortedSet<Course> registeredCourses;//todo check if we need concurrency
+    private SortedSet<Course> registeredCourses;
 
     public Student(String username,String password) {
         super(username, password);
@@ -15,7 +15,7 @@ public class Student extends User {
         return registeredCourses;
     }
 
-    public boolean haveAllKdamCourses(Database database,Course course){
+    public boolean haveAllKdamCourses(Course course){
         SortedSet<Course> KdamCourses = course.getKdamCourses();
         for (Course kdam:KdamCourses){
             if (!registeredCourses.contains(kdam)){
@@ -45,5 +45,9 @@ public class Student extends User {
 
     public int compareTo(Student s2) {
         return this.username.compareTo(s2.getName());
+    }
+
+    public void add(Course course) {
+        registeredCourses.add(course);
     }
 }

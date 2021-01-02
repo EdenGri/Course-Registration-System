@@ -12,7 +12,7 @@ public class IsRegisteredMessage implements Message {
     }
 
     @Override
-    public Message execute(Database database, Session session) {//todo check sync probably no need
+    public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = database.getCourses().get(courseNum);

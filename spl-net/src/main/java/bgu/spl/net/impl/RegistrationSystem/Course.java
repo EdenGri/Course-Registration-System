@@ -13,7 +13,7 @@ public class Course {
     private SortedSet<Course> kdamCourses;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
-    private int numOfCurrStudents;//todo check
+    private int numOfCurrStudents;
 
     public Course (int serialNum,String courseName, Short courseNum){
         this.serialNum = serialNum;
@@ -34,23 +34,15 @@ public class Course {
         return courseName;
     }
 
-    public boolean isAvailable(){//todo need sync?
+    public boolean isAvailable(){
         return (numOfMaxStudents-numOfCurrStudents)>0;
     }
     private int numOfSeatsAvailable(){
         return numOfMaxStudents-numOfCurrStudents;
     }
 
-    public int getNumOfCurrStudents() {
-        return numOfCurrStudents;
-    }
-
     public int getNumOfMaxStudents() {
         return numOfMaxStudents;
-    }
-
-    public void setNumOfCurrStudents(int numOfCurrStudents) {//todo needed?
-        this.numOfCurrStudents = numOfCurrStudents;
     }
 
     public void setNumOfMaxStudents(int numOfMaxStudents) {
@@ -65,11 +57,6 @@ public class Course {
         return registeredStudents;
     }
 
-
-    public void setKdamCoursesList(SortedSet KdamCourses) {
-        this.kdamCourses = KdamCourses;
-    }
-
     //add the sync in case of parallelism between courseStat and courseReg/courseUnreg
     public synchronized String getCourseStat(){
         String courseStat="Course: ("+courseNum+") "+courseName+"\n"+
@@ -80,7 +67,7 @@ public class Course {
 
     private String getRegisteredStudentsToString() {
         String output = "[";
-        for (Student student:registeredStudents){ //todo shouldnt we check its not empty?
+        for (Student student:registeredStudents){
             output = output.concat(student.getName()+",");
         }
         if (output.length()>1) {//if the is extra ","
@@ -121,5 +108,9 @@ public class Course {
 
     public void decrementNumOfCurrStudents() {
         numOfCurrStudents--;
+    }
+
+    public boolean add(Student user) {
+        return registeredStudents.add(user);
     }
 }

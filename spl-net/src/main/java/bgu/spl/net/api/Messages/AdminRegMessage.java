@@ -19,17 +19,11 @@ public class AdminRegMessage implements Message {
 
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//register an admin in the service
         User user = session.getUser();
+        //check if the user not loggedIn
         if (user == null) { //todo check
             User admin = new Admin(username, password);
             User toAdd = database.UserReg(username, admin);

@@ -10,12 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message> {
-    //todo check if is this byte buffer is the best solution
-    //todo check if there is more elegant way than if else..
     private  short opcode=-1;
     private final ByteBuffer opcodeBuffer = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
-    private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
+    private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
     private int zeroCounter = 0;
 
@@ -282,11 +280,10 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         opcode=-1;
         opcodeBuffer.clear();
         courseNum.clear();
-        // messageOpcode.clear();//todo delete?
     }
 
     @Override
-    public byte[] encode(Message message) {//todo what if the object is not non of this types?
+    public byte[] encode(Message message) {
         //todo check if needed
         /*
         if (message instanceof AdminRegMessage) {
@@ -331,8 +328,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
         } else*/
 
-        //todo check more elegant way for combine bytearray
-        //todo maybe to split error and ack
+
         byte[] opcode = createOpcode(message);
         byte[] MessageOpcode = createMessageOpcode(message);
         int outputSize = 4;
@@ -350,21 +346,21 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             //add the optional part at AckMessage
             if (responseBytes != null) {
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
-                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);//todo check
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);
             }
             else {
-                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);
             }
             return output;
         }
-        else if (message instanceof ErrorMessage) {
+        //the message is instance of errorMessage
+        else{
             outputSize = opcode.length + MessageOpcode.length;
             byte[] output = new byte[outputSize];
             System.arraycopy(opcode, 0, output, 0, opcode.length);
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             return output;
         }
-        return null;//todo what to return if the message is not ack or error
     }
 
     private byte[] createOpcode(Message message) {
@@ -373,10 +369,10 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         } else if (message instanceof ErrorMessage) {
             return shortToBytes((short) 13);
         }
-        return null;//todo what to return if the message is not ack or error
+        return null;
     }
 
-    private byte[] createMessageOpcode(Message message) {//todo what to return if the message is not ServerToClientMessage
+    private byte[] createMessageOpcode(Message message) {
         Short MessageOpcode = ((ServerToClientMessage) message).getMessageOpcode();
         return shortToBytes(MessageOpcode);
     }

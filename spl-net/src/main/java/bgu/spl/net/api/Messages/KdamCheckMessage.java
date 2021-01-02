@@ -7,7 +7,6 @@ public class KdamCheckMessage implements Message {
     private Short courseNum;
 
     public KdamCheckMessage(Short courseNum) {
-
         this.courseNum = courseNum;
     }
 

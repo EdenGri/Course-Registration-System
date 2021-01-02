@@ -8,7 +8,7 @@ import bgu.spl.net.impl.RegistrationSystem.User;
 
 public class MyCoursesMessage implements Message {
     @Override
-    public Message execute(Database database, Session session) {//todo check sync probably not
+    public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user instanceof Student && user.getIsLoggedIn()) {
 
