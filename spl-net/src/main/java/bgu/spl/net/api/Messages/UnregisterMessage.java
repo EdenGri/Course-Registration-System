@@ -13,6 +13,7 @@ public class UnregisterMessage implements Message {
     }
 
     @Override
+    //unregister to a specific course
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (database.CourseUnregistered(user, courseNum)) {

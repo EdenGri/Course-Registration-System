@@ -11,6 +11,7 @@ public class CourseRegMessage implements Message {
     }
 
     @Override
+    //register the student to course the student want to register
     public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (database.CourseReg(user, courseNum)) {

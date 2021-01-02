@@ -10,20 +10,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message> {
-    //todo check if is this byte buffer is the best solution
-    //todo check if there is more elegant way than if else..
     private  short opcode=-1;
     private final ByteBuffer opcodeBuffer = ByteBuffer.allocate(2);
     private final ByteBuffer courseNum = ByteBuffer.allocate(2);
-    private byte[] bytes = new byte[1 << 10]; //start with 1k//todo acording to message 1
+    private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
     private int zeroCounter = 0;
 
     @Override
     public Message decodeNextByte(byte nextByte) {
-        if (opcode==-1) {
+
+        if (opcode==-1) {//we read the opcode
             opcodeBuffer.put(nextByte);
-            if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!opcodeBuffer.hasRemaining()) { //we read 2 bytes
                 opcodeBuffer.flip();
                 opcode=opcodeBuffer.getShort();
 
@@ -158,7 +157,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteCourseReg(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 CourseRegMessage output = new CourseRegMessage(courseNum.getShort());
                 clearAll();
@@ -171,7 +170,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteKdamCheck(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 KdamCheckMessage output = new KdamCheckMessage(courseNum.getShort());
                 clearAll();
@@ -184,7 +183,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteCourseStat(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 CourseStatMessage output = new CourseStatMessage(courseNum.getShort());
                 clearAll();
@@ -209,7 +208,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     public Message decodeNextByteIsRegistered(byte nextByte) {
         if (courseNum.hasRemaining()) {
             courseNum.put(nextByte);
-            if (!courseNum.hasRemaining()) { //we read 2 bytes and therefore can take the length
+            if (!courseNum.hasRemaining()) { //we read 2 bytes
                 courseNum.flip();
                 IsRegisteredMessage output = new IsRegisteredMessage(courseNum.getShort());
                 clearAll();
@@ -259,14 +258,13 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     }
 
  */
-
+    //add next byte to bytes
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
             bytes = Arrays.copyOf(bytes, len * 2);
         }
         bytes[len++] = nextByte;
     }
-
 
     private String popString() {
         //notice that we explicitly requesting that the string will be decoded from UTF-8
@@ -276,17 +274,17 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         return result;
     }
 
+    //returns the fields to their default state
     private void clearAll() {
         len = 0;
         zeroCounter = 0;
         opcode=-1;
         opcodeBuffer.clear();
         courseNum.clear();
-        // messageOpcode.clear();//todo delete?
     }
 
     @Override
-    public byte[] encode(Message message) {//todo what if the object is not non of this types?
+    public byte[] encode(Message message) {
         //todo check if needed
         /*
         if (message instanceof AdminRegMessage) {
@@ -331,11 +329,12 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
         } else*/
 
-        //todo check more elegant way for combine bytearray
-        //todo maybe to split error and ack
+
         byte[] opcode = createOpcode(message);
         byte[] MessageOpcode = createMessageOpcode(message);
+        //the size of the opcode and the size of the other message opcode
         int outputSize = 4;
+        //we encode AckMessage
         if (message instanceof AckMessage) {
             String response = ((AckMessage<String>) message).getResponse();
             byte[] responseBytes = null;
@@ -345,38 +344,43 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             }
             outputSize++;//for the last "0"  byte
             byte[] output = new byte[outputSize];
+            //add opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
+            //add other message opcode to output
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             //add the optional part at AckMessage
             if (responseBytes != null) {
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
-                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);//todo check
+                //add last "0"
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);
             }
             else {
-                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);//todo check
+                //add last "0"
+                System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);
             }
             return output;
         }
-        else if (message instanceof ErrorMessage) {
-            outputSize = opcode.length + MessageOpcode.length;
+        //we encode errorMessage
+        else{
             byte[] output = new byte[outputSize];
+            //add opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
+            //add other message opcode to output
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             return output;
         }
-        return null;//todo what to return if the message is not ack or error
     }
-
+    //encode opcode for specific message
     private byte[] createOpcode(Message message) {
         if (message instanceof AckMessage) {
             return shortToBytes((short) 12);
         } else if (message instanceof ErrorMessage) {
             return shortToBytes((short) 13);
         }
-        return null;//todo what to return if the message is not ack or error
+        return null;
     }
-
-    private byte[] createMessageOpcode(Message message) {//todo what to return if the message is not ServerToClientMessage
+    //encode other message opcode
+    private byte[] createMessageOpcode(Message message) {
         Short MessageOpcode = ((ServerToClientMessage) message).getMessageOpcode();
         return shortToBytes(MessageOpcode);
     }

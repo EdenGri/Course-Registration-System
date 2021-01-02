@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-    private final static String coursesPath = "Courses.txt"; //TODO check if ok like this when running in VM & courses location
+    private final static String coursesPath = "./Courses.txt"; //TODO check if ok like this when running in VM & courses location
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Short, Course> courses = new ConcurrentHashMap<>();//todo needs why concurrent?
+    private final ConcurrentHashMap<Short, Course> courses = new ConcurrentHashMap<>();
 
 
     //to prevent user from creating new Database
@@ -39,33 +39,40 @@ public class Database {
         private static Database instance = new Database();
     }
 
+    //Returns the registered users
     public ConcurrentHashMap<String, User> getRegisteredUsers() {
         return registeredUsers;
     }
 
+    //Returns the courses
     public ConcurrentHashMap<Short, Course> getCourses() {
         return courses;
     }
 
+    //register user to the service
     public User UserReg(String userName, User user) {
+        //indicates if the user don't registered yet
         return registeredUsers.putIfAbsent(userName, user);
     }
 
+    //register user to the course with the specific number
     public boolean CourseReg(User user, Short courseNum) {
         boolean output = false;
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = courses.get(courseNum);
-            if (course != null && ((Student) user).haveAllKdamCourses(this, course)) {
-                //todo dont sure about snyc think theres no need
+            //check if the course exists and the user have all kdam courses
+            if (course != null && ((Student) user).haveAllKdamCourses(course)) {
                 //add the sync in case of parallelism between courseStat and courseReg
                 synchronized (course) {
+                    //check if there is empty seat in the course for user
                     if (course.isAvailable()) {
-                        output = course.getRegisteredStudents().add((Student) user);
+                        output = course.add((Student) user);
+                        //check if the user not already registered to this course
                         if (output) {
                             course.incrementNumOfCurrStudents();
                             //add the sync in case of parallelism between studentStat and courseReg
                             synchronized (user) {
-                                ((Student) user).getRegisteredCourses().add(course);
+                                ((Student) user).add(course);
                             }
                         }
                     }
@@ -75,10 +82,12 @@ public class Database {
         return output;
     }
 
-    public boolean CourseUnregistered(User user, Short courseNum) {//todo add sync
+    //unregister user to the course with the specific number
+    public boolean CourseUnregistered(User user, Short courseNum) {
         boolean output = false;
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = courses.get(courseNum);
+            //checks the course is exists
             if (course != null) {
                 //add the sync in case of parallelism between courseStat and courseUnreg
                 synchronized (course) {
@@ -97,14 +106,17 @@ public class Database {
         return output;
     }
 
+    //Returns the course status to the course with the specific number
     public String getCourseStat(Short courseNum) {
         Course course = courses.get(courseNum);
+        //check if the course is exits
         if (course != null) {
             return course.getCourseStat();
         }
         return null;
     }
 
+    //Returns the student status to the student with the specific name
     public String getStudentStat(String StudentUserName) {
         User user = getRegisteredUsers().get(StudentUserName);
         if (user instanceof Student) {
@@ -130,7 +142,7 @@ public class Database {
                 String courseName = splitString[1];
                 Course course = new Course(line, courseName, courseNum);
                 line++;
-                courses.putIfAbsent(courseNum, course);//todo chang to put?
+                courses.putIfAbsent(courseNum, course);
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 course.setNumOfMaxStudents(numOfMaxStudents);
             }
@@ -141,7 +153,7 @@ public class Database {
                 String KdamCoursesList = splitString[2];
                 //we check if the kdamCourses not empty list of "[]"
                 if (KdamCoursesList.length() > 2) {
-                    String kdamSubst = KdamCoursesList.substring(1, KdamCoursesList.length() - 1);//TODO CHANGE THE LIST TO COURSES
+                    String kdamSubst = KdamCoursesList.substring(1, KdamCoursesList.length() - 1);
                     String[] KdamArray = kdamSubst.split(",");
                     for (String numOfKdam : KdamArray) {
                         Course addCourse = courses.get(Short.valueOf(numOfKdam));
@@ -152,7 +164,6 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-
         }
         return true;
     }

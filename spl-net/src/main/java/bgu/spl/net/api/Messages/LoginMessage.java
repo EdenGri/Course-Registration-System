@@ -18,18 +18,10 @@ public class LoginMessage implements Message {
         this.password = password;
     }
 
-    public String getUsername() {
-        return userName;
-    } //todo need? didnt we do this in user?
-
-    public String getPassword() {
-        return password;
-    } //todo need? didnt we do this in user?
-
-
     @Override
-    public Message execute(Database database, Session session) {//todo check sync
+    public Message execute(Database database, Session session) {//login a user into the server
         User user = database.getRegisteredUsers().get(userName);
+        //check if user registered, the password is correct, the user not loggedIn
         if (user != null && user.getPassword().equals(password)
                 && session.getUser() == null && user.login()) {
 

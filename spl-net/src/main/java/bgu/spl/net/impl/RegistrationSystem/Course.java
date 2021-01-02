@@ -1,10 +1,8 @@
 package bgu.spl.net.impl.RegistrationSystem;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Course {
     private int serialNum;
@@ -13,7 +11,7 @@ public class Course {
     private SortedSet<Course> kdamCourses;
     private SortedSet<Student> registeredStudents;
     private int numOfMaxStudents;
-    private int numOfCurrStudents;//todo check
+    private int numOfCurrStudents;
 
     public Course (int serialNum,String courseName, Short courseNum){
         this.serialNum = serialNum;
@@ -26,50 +24,47 @@ public class Course {
         numOfCurrStudents=0;
     }
 
+    //Returns serial number of the course
     public int getSerialNum(){
         return serialNum;
     }
 
-    public String getCourseName(){
-        return courseName;
-    }
-
-    public boolean isAvailable(){//todo need sync?
-        return (numOfMaxStudents-numOfCurrStudents)>0;
-    }
-    private int numOfSeatsAvailable(){
-        return numOfMaxStudents-numOfCurrStudents;
-    }
-
-    public int getNumOfCurrStudents() {
-        return numOfCurrStudents;
-    }
-
+    //Returns the number of max students in the course
     public int getNumOfMaxStudents() {
         return numOfMaxStudents;
     }
 
-    public void setNumOfCurrStudents(int numOfCurrStudents) {//todo needed?
-        this.numOfCurrStudents = numOfCurrStudents;
+    //Returns the number of the course
+    public Short getCourseNum() {
+        return courseNum;
     }
 
+    //Returns true if there is empty seat in the course
+    public boolean isAvailable(){
+        return (numOfMaxStudents-numOfCurrStudents)>0;
+    }
+
+    //Returns the number of empty seats in the course
+    private int numOfSeatsAvailable(){
+        return numOfMaxStudents-numOfCurrStudents;
+    }
+
+    //Set the number of max seats in the course
     public void setNumOfMaxStudents(int numOfMaxStudents) {
         this.numOfMaxStudents = numOfMaxStudents;
     }
 
+    //Returns the kdam courses
     public SortedSet<Course> getKdamCourses(){
         return kdamCourses;
     }
 
+    //returns the students that registered to the course
     public SortedSet<Student> getRegisteredStudents(){
         return registeredStudents;
     }
 
-
-    public void setKdamCoursesList(SortedSet KdamCourses) {
-        this.kdamCourses = KdamCourses;
-    }
-
+    //Returns the course state
     //add the sync in case of parallelism between courseStat and courseReg/courseUnreg
     public synchronized String getCourseStat(){
         String courseStat="Course: ("+courseNum+") "+courseName+"\n"+
@@ -80,7 +75,7 @@ public class Course {
 
     private String getRegisteredStudentsToString() {
         String output = "[";
-        for (Student student:registeredStudents){ //todo shouldnt we check its not empty?
+        for (Student student:registeredStudents){
             output = output.concat(student.getName()+",");
         }
         if (output.length()>1) {//if the is extra ","
@@ -90,16 +85,14 @@ public class Course {
         return output;
     }
 
+    //Returns true if the user registerd to the course
     public boolean isRegistered(User user){
         return registeredStudents.contains(user);
     }
 
+    //compare two courses by theirs serial number
     public int compareTo(Course c2) {
         return serialNum-c2.getSerialNum();
-    }
-
-    public Short getCourseNum() {
-        return courseNum;
     }
 
     public String KdamCoursesToString() {
@@ -115,11 +108,18 @@ public class Course {
         return output;
     }
 
+    //increment by one the number of the registered students
     public void incrementNumOfCurrStudents() {
         numOfCurrStudents++;
     }
 
+    //decrement by one the number of the registered students
     public void decrementNumOfCurrStudents() {
         numOfCurrStudents--;
+    }
+
+    //add student to the registered students
+    public boolean add(Student student) {
+        return registeredStudents.add(student);
     }
 }

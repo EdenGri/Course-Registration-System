@@ -17,25 +17,16 @@ public class StudentRegMessage implements Message {
 
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     @Override
-    public Message execute(Database database, Session session) {
+    public Message execute(Database database, Session session) {//register a student in the service
         User user = session.getUser();
+        //check if the user not loggedIn
         if (user == null) {//todo check
-
             User student = new Student(username, password);
             User toAdd = database.UserReg(username, student);
             if (toAdd == null) {
                 return new AckMessage((short) 2, null);
             }
-
         }
         return new ErrorMessage((short) 2);
 

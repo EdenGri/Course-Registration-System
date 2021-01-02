@@ -12,10 +12,12 @@ public class IsRegisteredMessage implements Message {
     }
 
     @Override
-    public Message execute(Database database, Session session) {//todo check sync probably no need
+    //Returns if the student is registered to the specified course
+    public Message execute(Database database, Session session) {
         User user = session.getUser();
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = database.getCourses().get(courseNum);
+            //check if the course exists and the user registered to it
             if (course != null && course.isRegistered(user)) {
                 return new AckMessage<>((short) 9, "REGISTERED");
             } else {
