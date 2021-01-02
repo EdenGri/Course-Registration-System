@@ -17,7 +17,7 @@ public class IsRegisteredMessage implements Message {
         User user = session.getUser();
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = database.getCourses().get(courseNum);
-            //check if the course exists and the user registered to it
+            //checks if the course exists and if the user is registered to it
             if (course != null && course.isRegistered(user)) {
                 return new AckMessage<>((short) 9, "REGISTERED");
             } else {

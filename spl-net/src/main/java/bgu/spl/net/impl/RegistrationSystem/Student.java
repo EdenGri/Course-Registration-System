@@ -16,7 +16,7 @@ public class Student extends User {
         return registeredCourses;
     }
 
-    //Returns true if the student have all the kdam courses that require for the spastic course
+    //Returns true if the student has all the kdam courses that are required for the specific course
     public boolean haveAllKdamCourses(Course course){
         SortedSet<Course> KdamCourses = course.getKdamCourses();
         for (Course kdam:KdamCourses){
@@ -27,8 +27,8 @@ public class Student extends User {
         return true;
     }
 
-    //Returns the student status
-    //add the sync in case of parallelism between studentStat and courseReg/courseUnreg
+    //Returns the student's status
+    //added the sync in case of parallelism between studentStat and courseReg/courseUnreg
     public synchronized String getStudentStat(){
         return "Student: "+username+"\n"+
                 "Courses: "+getRegisteredCoursesToString();
@@ -39,19 +39,19 @@ public class Student extends User {
         for (Course course: registeredCourses){
             output = output.concat(course.getCourseNum()+",");
         }
-        if (output.length()>1) {//if the is extra ","
+        if (output.length()>1) {//if there is an extra ","
             output = output.substring(0, output.length() - 1);//remove the last ","
         }
         output = output.concat("]");
         return output;
     }
 
-    //compare students by the alphabetically order
+    //compares students by alphabetical order
     public int compareTo(Student s2) {
         return this.username.compareTo(s2.getName());
     }
 
-    //add the course to the registered courses
+    //adds the course to the registered courses
     public void add(Course course) {
         registeredCourses.add(course);
     }

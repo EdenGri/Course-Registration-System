@@ -39,7 +39,7 @@ public class Course {
         return courseNum;
     }
 
-    //Returns true if there is empty seat in the course
+    //Returns true if there is an empty seat in the course
     public boolean isAvailable(){
         return (numOfMaxStudents-numOfCurrStudents)>0;
     }
@@ -49,7 +49,7 @@ public class Course {
         return numOfMaxStudents-numOfCurrStudents;
     }
 
-    //Set the number of max seats in the course
+    //Sets the number of max seats in the course
     public void setNumOfMaxStudents(int numOfMaxStudents) {
         this.numOfMaxStudents = numOfMaxStudents;
     }
@@ -59,13 +59,13 @@ public class Course {
         return kdamCourses;
     }
 
-    //returns the students that registered to the course
+    //Returns the students that are registered to the course
     public SortedSet<Student> getRegisteredStudents(){
         return registeredStudents;
     }
 
     //Returns the course state
-    //add the sync in case of parallelism between courseStat and courseReg/courseUnreg
+    //added the sync in case of parallelism between courseStat and courseReg/courseUnreg
     public synchronized String getCourseStat(){
         String courseStat="Course: ("+courseNum+") "+courseName+"\n"+
                 "Seats Available: "+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+
@@ -85,12 +85,12 @@ public class Course {
         return output;
     }
 
-    //Returns true if the user registerd to the course
+    //Returns true if the user iz registered to the course
     public boolean isRegistered(User user){
         return registeredStudents.contains(user);
     }
 
-    //compare two courses by theirs serial number
+    //compares two courses by their serial number
     public int compareTo(Course c2) {
         return serialNum-c2.getSerialNum();
     }
@@ -108,17 +108,17 @@ public class Course {
         return output;
     }
 
-    //increment by one the number of the registered students
+    //increments the number of the registered students by one
     public void incrementNumOfCurrStudents() {
         numOfCurrStudents++;
     }
 
-    //decrement by one the number of the registered students
+    //decrements the number of the registered students by one
     public void decrementNumOfCurrStudents() {
         numOfCurrStudents--;
     }
 
-    //add student to the registered students
+    //add student to the registered students by one
     public boolean add(Student student) {
         return registeredStudents.add(student);
     }

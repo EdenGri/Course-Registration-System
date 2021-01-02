@@ -23,16 +23,16 @@ public abstract class User {
         return password;
     }
 
-    //Returns true if the user loggedIn
+    //Returns true if the user is logged in
     public boolean getIsLoggedIn(){
         return isLoggedIn.get();
     }
 
-    //Returns true if login done successfully
+    //Returns true if login is done successfully
     public boolean login(){
         return isLoggedIn.compareAndSet(false,true);
     }
-    //Returns true if login done successfully
+    //Returns true if login is done successfully
     public boolean logout(){
         return isLoggedIn.compareAndSet(true,false);
     }

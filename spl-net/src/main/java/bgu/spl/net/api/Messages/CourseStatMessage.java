@@ -10,7 +10,7 @@ public class CourseStatMessage implements Message {
     }
 
     @Override
-    //admin try to receive the state of a specific course
+    //admin tries to receive the state of a specific course
     public Message execute(Database database, Session session) {
         User user= session.getUser();
         if (user instanceof Admin) {

@@ -195,7 +195,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
 
     public Message decodeNextByteStudentStat(byte nextByte) {
         //notice that the top 128 ascii characters have the same representation as their utf-8 counterparts
-        //this allow us to do the following comparison
+        //this allows us to do the following comparison
         if (nextByte == 0) {
             String studentName = popString();
             clearAll();
@@ -258,7 +258,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     }
 
  */
-    //add next byte to bytes
+    //adds next byte to bytes
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
             bytes = Arrays.copyOf(bytes, len * 2);
@@ -267,8 +267,8 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
     }
 
     private String popString() {
-        //notice that we explicitly requesting that the string will be decoded from UTF-8
-        //this is not actually required as it is the default encoding in java.
+        //notice that we are explicitly requesting that the string will be decoded from UTF-8
+        //this is not actually required as it is the default encoding in java
         String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         len = 0;
         return result;
@@ -344,18 +344,18 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
             }
             outputSize++;//for the last "0"  byte
             byte[] output = new byte[outputSize];
-            //add opcode to output
+            //adds opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
-            //add other message opcode to output
+            //adds other message opcode to output
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
-            //add the optional part at AckMessage
+            //adds the optional part of the AckMessage
             if (responseBytes != null) {
                 System.arraycopy(responseBytes, 0, output, opcode.length + MessageOpcode.length, responseBytes.length);
-                //add last "0"
+                //adds last "0"
                 System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length+responseBytes.length, 1);
             }
             else {
-                //add last "0"
+                //adds last "0"
                 System.arraycopy(shortToBytes((short) 0), 0, output, opcode.length + MessageOpcode.length, 1);
             }
             return output;
@@ -363,14 +363,14 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         //we encode errorMessage
         else{
             byte[] output = new byte[outputSize];
-            //add opcode to output
+            //adds opcode to output
             System.arraycopy(opcode, 0, output, 0, opcode.length);
-            //add other message opcode to output
+            //adds other message opcode to output
             System.arraycopy(MessageOpcode, 0, output, opcode.length, MessageOpcode.length);
             return output;
         }
     }
-    //encode opcode for specific message
+    //encodes opcode for specific message
     private byte[] createOpcode(Message message) {
         if (message instanceof AckMessage) {
             return shortToBytes((short) 12);
@@ -379,7 +379,7 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         }
         return null;
     }
-    //encode other message opcode
+    //encodes other message opcode
     private byte[] createMessageOpcode(Message message) {
         Short MessageOpcode = ((ServerToClientMessage) message).getMessageOpcode();
         return shortToBytes(MessageOpcode);

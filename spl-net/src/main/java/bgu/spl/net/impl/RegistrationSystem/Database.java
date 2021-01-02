@@ -49,28 +49,28 @@ public class Database {
         return courses;
     }
 
-    //register user to the service
+    //registers a user to the service
     public User UserReg(String userName, User user) {
         //indicates if the user don't registered yet
         return registeredUsers.putIfAbsent(userName, user);
     }
 
-    //register user to the course with the specific number
+    //registers a user to the course with the specific number
     public boolean CourseReg(User user, Short courseNum) {
         boolean output = false;
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = courses.get(courseNum);
-            //check if the course exists and the user have all kdam courses
+            //checks if the course exists and if the user has all kdam courses
             if (course != null && ((Student) user).haveAllKdamCourses(course)) {
-                //add the sync in case of parallelism between courseStat and courseReg
+                //added the sync in case of parallelism between courseStat and courseReg
                 synchronized (course) {
-                    //check if there is empty seat in the course for user
+                    //check if there is an empty seat in the course for a user
                     if (course.isAvailable()) {
                         output = course.add((Student) user);
-                        //check if the user not already registered to this course
+                        //check if the user is not already registered to this course
                         if (output) {
                             course.incrementNumOfCurrStudents();
-                            //add the sync in case of parallelism between studentStat and courseReg
+                            //added the sync in case of parallelism between studentStat and courseReg
                             synchronized (user) {
                                 ((Student) user).add(course);
                             }
@@ -82,17 +82,17 @@ public class Database {
         return output;
     }
 
-    //unregister user to the course with the specific number
+    //unregisters user to the course with the specific number
     public boolean CourseUnregistered(User user, Short courseNum) {
         boolean output = false;
         if (user instanceof Student && user.getIsLoggedIn()) {
             Course course = courses.get(courseNum);
-            //checks the course is exists
+            //checks if the course is exists
             if (course != null) {
-                //add the sync in case of parallelism between courseStat and courseUnreg
+                //added the sync in case of parallelism between courseStat and courseUnreg
                 synchronized (course) {
                     output = course.getRegisteredStudents().remove((Student) user);
-                    //add the sync in case of parallelism between studentStat and courseUnreg
+                    //added the sync in case of parallelism between studentStat and courseUnreg
                     synchronized (user) {
                         ((Student) user).getRegisteredCourses().remove(course);
                     }
@@ -109,7 +109,7 @@ public class Database {
     //Returns the course status to the course with the specific number
     public String getCourseStat(Short courseNum) {
         Course course = courses.get(courseNum);
-        //check if the course is exits
+        //checks if the course is exists
         if (course != null) {
             return course.getCourseStat();
         }
@@ -134,24 +134,30 @@ public class Database {
     boolean initialize(String coursesFilePath) {
         ArrayList<String> listOfCourses;
         try {
+            //reads all lines from courses file
             listOfCourses = (ArrayList<String>) Files.readAllLines(Paths.get(coursesFilePath));
             int line = 1;
             for (String courseLine : listOfCourses) {
                 String[] splitString = courseLine.split("\\|");
+                //saves the course number
                 Short courseNum = Short.parseShort(splitString[0]);
+                //saves the course name
                 String courseName = splitString[1];
+                //creates new course object
                 Course course = new Course(line, courseName, courseNum);
                 line++;
                 courses.putIfAbsent(courseNum, course);
+                //saves the course's seat limit
                 int numOfMaxStudents = Integer.parseInt(splitString[3]);
                 course.setNumOfMaxStudents(numOfMaxStudents);
             }
+            //saves kdam courses list file according to order in courses file
             for (String courseLine : listOfCourses) {
                 String[] splitString = courseLine.split("\\|");
                 Short courseNum = Short.parseShort(splitString[0]);
                 Course course = courses.get(courseNum);
                 String KdamCoursesList = splitString[2];
-                //we check if the kdamCourses not empty list of "[]"
+                //we check if the kdamCourses list is not an empty list of "[]"
                 if (KdamCoursesList.length() > 2) {
                     String kdamSubst = KdamCoursesList.substring(1, KdamCoursesList.length() - 1);
                     String[] KdamArray = kdamSubst.split(",");

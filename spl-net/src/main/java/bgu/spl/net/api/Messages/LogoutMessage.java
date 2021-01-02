@@ -14,7 +14,7 @@ public class LogoutMessage implements Message {
     @Override
     public Message execute(Database database, Session session) {////logout a user from the server
         User user = session.getUser();
-        //check the user loggedIn
+        //checks if the user is logged in
         if (user != null && user.logout()) {
 
             session.setUser(null);
