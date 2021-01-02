@@ -6,23 +6,23 @@ import bgu.spl.net.impl.RegistrationSystem.*;
 public class StudentStatMessage implements Message {
     String StudentUserName;
 
-    public StudentStatMessage(String userName){
+    public StudentStatMessage(String userName) {
         super();
-        this.StudentUserName=userName;
+        this.StudentUserName = userName;
     }
 
 
     @Override
     public Message execute(Database database, Session session) {//todo check sync probably not
-        User user=session.getUser();
-        if (user instanceof Admin) {
-            if (user.getIsLoggedIn()) {
-                String studentStat = database.getStudentStat(StudentUserName);
-                if (studentStat!=null) {
-                    return new AckMessage<>((short) 8, studentStat);
-                }
+        User user = session.getUser();
+        if (user instanceof Admin && user.getIsLoggedIn()) {
+
+            String studentStat = database.getStudentStat(StudentUserName);
+            if (studentStat != null) {
+                return new AckMessage<>((short) 8, studentStat);
             }
+
         }
-        return new ErrorMessage((short)8);
+        return new ErrorMessage((short) 8);
     }
 }
