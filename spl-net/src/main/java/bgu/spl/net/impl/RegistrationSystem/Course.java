@@ -72,7 +72,7 @@ public class Course {
 
     //add the sync in case of parallelism between courseStat and courseReg/courseUnreg
     public synchronized String getCourseStat(){
-        String courseStat="Course: ("+courseNum+")"+courseName+"\n"+
+        String courseStat="Course: ("+courseNum+") "+courseName+"\n"+
                 "Seats Available: "+numOfSeatsAvailable()+"/"+numOfMaxStudents+"\n"+
                 "Students Registered: "+getRegisteredStudentsToString();
         return courseStat;
