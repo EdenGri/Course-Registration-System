@@ -21,7 +21,7 @@ public class StudentRegMessage implements Message {
     public Message execute(Database database, Session session) {//register a student in the service
         User user = session.getUser();
         //check if the user not loggedIn
-        if (user == null) {//todo check
+        if (user == null) {
             User student = new Student(username, password);
             User toAdd = database.UserReg(username, student);
             if (toAdd == null) {

@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-    private final static String coursesPath = "./Courses.txt"; //TODO check if ok like this when running in VM & courses location
+    private final static String coursesPath = "./Courses.txt";
     private final ConcurrentHashMap<String, User> registeredUsers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Short, Course> courses = new ConcurrentHashMap<>();
 

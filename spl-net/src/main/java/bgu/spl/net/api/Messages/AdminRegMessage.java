@@ -24,7 +24,7 @@ public class AdminRegMessage implements Message {
     public Message execute(Database database, Session session) {//register an admin in the service
         User user = session.getUser();
         //checks if the user is not logged in
-        if (user == null) { //todo check
+        if (user == null) {
             User admin = new Admin(username, password);
             User toAdd = database.UserReg(username, admin);
             if (toAdd == null) {
