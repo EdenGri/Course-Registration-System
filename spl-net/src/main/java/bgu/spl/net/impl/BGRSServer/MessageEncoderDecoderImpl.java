@@ -217,34 +217,6 @@ public class MessageEncoderDecoderImpl implements MessageEncoderDecoder<Message>
         return null;
     }
 
-    /*
-        public Message decodeNextByteAckMessage(byte nextByte) {
-            if (messageOpcode.hasRemaining()) {
-                messageOpcode.put(nextByte);
-                if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-                    messageOpcode.flip();
-                    AckMessage output = new AckMessage(messageOpcode.getShort());
-                    clearAll();
-                    return output;
-                }
-            }
-            return null;
-        }
-
-        public Message decodeNextByteErrorMessage(byte nextByte) {
-            if (messageOpcode.hasRemaining()) {
-                messageOpcode.put(nextByte);
-                if (!messageOpcode.hasRemaining()) { //we read 2 bytes and therefore can take the length
-                    messageOpcode.flip();
-                    ErrorMessage output = new ErrorMessage(messageOpcode.getShort());
-                    clearAll();
-                    return output;
-                }
-            }
-            return null;
-        }
-
-     */
     //adds next byte to bytes
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
